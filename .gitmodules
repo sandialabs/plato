@@ -1,0 +1,9 @@
+[submodule "platoengine"]
+	path = platoengine
+	url = ../platoengine.git
+[submodule "platoanalyze"]
+	path = platoanalyze
+	url = ../platoanalyze.git
+[submodule "spack"]
+	path = spack
+	url = ../spack.git
