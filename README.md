@@ -18,7 +18,7 @@ The `gpu-slim` spec builds platoanalyze without hex elements and all penalizatio
 After the initial clone, each submodule may be in a detached head state.
 While not necessary to build, the main development branches of each repository may be checked out as:
 ```
-source utilities/update-all.sh
+source utilities/checkout-develop.sh
 ```
 
 To chain the new installation to an existing installation, use the `utilities/chain-installation.sh` script:
