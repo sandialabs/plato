@@ -21,6 +21,12 @@ While not necessary to build, the main development branches of each repository m
 source utilities/update-all.sh
 ```
 
+To chain the new installation to an existing installation, use the `utilities/chain-installation.sh` script:
+```
+source utilities/chain-installation.sh /path/to/existing/installation
+```
+The path should be to the parent of the spack directory containing the installation.
+
 After the intial setup, an existing environment can be initialized using `utilities/build-env.sh` or `utilities/test-env.sh`.
 The main difference is that `test-env.sh` will load platoengine and platoanalyze to your path.
 
