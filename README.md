@@ -5,7 +5,13 @@ The goal is to facilitate cloning and managing multiple repositories and several
 
 ## Getting started
 
-To begin, clone this repository using the `--recursive` option and set up a spack environment as:
+If it isn't already in your rc script, ensure you have "git" and "git-lfs" loaded, e.g.,
+```
+module load cde/v3/git/2.35.2
+module load cde/v3/git-lfs/2.11.0
+```
+
+Then, clone this repository using the `--recursive` option and set up a spack environment as:
 ```
 git clone git@cee-gitlab.sandia.gov:plato/super-plato.git --recursive
 cd super-plato
