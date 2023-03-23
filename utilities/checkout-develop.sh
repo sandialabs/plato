@@ -6,7 +6,7 @@ git pull
 git submodule update --init --recursive
 popd
 
-pushd platoanalye
+pushd platoanalyze
 git checkout develop
 git pull
 git submodule update --init --recursive
