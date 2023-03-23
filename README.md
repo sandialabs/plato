@@ -15,17 +15,14 @@ Then, clone this repository using the `--recursive` option and set up a spack en
 ```
 git clone git@cee-gitlab.sandia.gov:plato/super-plato.git --recursive
 cd super-plato
+source utilities/checkout-develop.sh
 source utilities/setup-env.sh <build configuration> [CUDA architecture]
 ```
 This will clone and checkout all submodules, as well as set up a spack environment for a cpu build.
 The `setup-env.sh` script accepts `cpu`, `gpu`, and `gpu-slim` build configurations, and the `gpu` options require a CUDA architecture argument.
 The `gpu-slim` spec builds platoanalyze without hex elements and all penalization methods for a faster build.
 
-After the initial clone, each submodule may be in a detached head state.
-While not necessary to build, the main development branches of each repository may be checked out as:
-```
-source utilities/checkout-develop.sh
-```
+After the initial clone, each submodule may be in a detached head state, and so the `checkout-develop.sh` script may be used to checkout the main development branches of each repo.
 
 To chain the new installation to an existing installation, use the `utilities/chain-installation.sh` script:
 ```
