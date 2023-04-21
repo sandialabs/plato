@@ -33,3 +33,15 @@ The path should be to the parent of the spack directory containing the installat
 After the intial setup, an existing environment can be initialized using `utilities/build-env.sh` or `utilities/test-env.sh`.
 The main difference is that `test-env.sh` will load platoengine and platoanalyze to your path.
 
+## Managing branches
+
+Since each repository is a submodule, `git submodule foreach` can be used to manage branches and common git operations.
+For example, checking out a new branch in each repository can be accomplished with
+```
+git submodule foreach git checkout -b branch_name
+```
+Changes in each repository can be pushed to the remote by 
+```
+git submodule foreach git push origin HEAD
+```
+
