@@ -7,5 +7,6 @@ git show-ref --verify --quiet refs/heads/${BRANCH}
 BRANCH_EXISTS=$?
 if [[ ${BRANCH_EXISTS} == 0 ]]
 then
-    git pull "${BRANCH}" --recurse-submodules
+    echo "Merging ${BRANCH} with default"
+    git pull origin "${BRANCH}" --recurse-submodules
 fi
