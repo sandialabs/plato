@@ -22,7 +22,8 @@ This will clone and checkout all submodules, as well as set up a spack environme
 The `setup-env.sh` script accepts `cpu`, `cpu-python-app`, `cpu-debug`, `dakota`, `gpu`, and `gpu-slim` build configurations, and the `gpu` options require a CUDA architecture argument.
 The `gpu-slim` spec builds platoanalyze without hex elements and all penalization methods for a faster build.
 
-After the initial clone, each submodule may be in a detached head state, and so the `checkout-develop.sh` script may be used to checkout the main development branches of each repo.
+After the initial clone, each submodule may be in a detached head state, and so the `checkout-develop.sh` script may be used to checkout the main development branches of each repo. 
+Note that `checkout-develop.sh` will perform a hard reset, and so if it is used on an already checked-out repository with changes, those changes may be lost.
 
 To chain the new installation to an existing installation, use the `utilities/chain-installation.sh` script:
 ```
