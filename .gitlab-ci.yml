@@ -1,0 +1,41 @@
+stages: [plato-build-test]
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  CLEAN_CACHE: "true"
+ 
+.trigger-pipeline:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "pipeline"
+    - if: $CI_PIPELINE_SOURCE == "web"
+  variables:
+    TRIGGER_BRANCH: ${PARENT_BRANCH}
+    TRIGGER_SOURCE: ${PARENT_SOURCE}
+  trigger:
+    include: ci/pipeline.yml
+    strategy: depend
+  needs: []
+ 
+trigger-cpu:
+  stage: plato-build-test
+  extends: .trigger-pipeline
+  variables:
+    CONFIGURATION: "cpu-python-app"
+
+trigger-cpu-debug:
+  stage: plato-build-test
+  extends: .trigger-pipeline
+  variables:
+    CONFIGURATION: "cpu-debug"
+
+trigger-gpu:
+  stage: plato-build-test
+  extends: .trigger-pipeline
+  variables:
+    CONFIGURATION: "gpu"
+
+# trigger-dakota:
+#   stage: plato-build-test
+#   extends: .trigger-pipeline
+#   variables:
+#     CONFIGURATION: "dakota"

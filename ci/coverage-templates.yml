@@ -1,0 +1,54 @@
+include:
+  local: ci/variables.yml
+
+# Job template to merge existing kcov coverage reports.
+.coverage-platoengine:
+  rules:
+    - if: $CONFIGURATION == "cpu-debug"
+  variables:
+    COVERAGE_DIR: "${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/coverage_${PLATO_ENGINE_FOLDER_PATTERN}"
+  before_script:
+    - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
+    - mkdir -p ${COVERAGE_DIR}
+  script:
+    - ALL_PE_COVERAGE_DIR_STRING=""
+    - |
+      for test in ${PLATO_ENGINE_UNIT_TESTER}
+      do
+        ALL_PE_COVERAGE_DIR_STRING="${ALL_PE_COVERAGE_DIR_STRING} ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/coverage_${test} "
+      done
+    - echo ${ALL_PE_COVERAGE_DIR_STRING}
+    - echo "Merging KCOV with pattern ${PLATO_ENGINE_FOLDER_PATTERN}"
+    - ${KCOV_DIR}/./kcov --include-pattern=${PLATO_ENGINE_FOLDER_PATTERN} --merge ${COVERAGE_DIR} ${ALL_PE_COVERAGE_DIR_STRING}
+    - cd ${COVERAGE_DIR}
+    - grep -oP 'coverage line-rate="[0-9].[0-9]*"' ${COVERAGE_DIR}/kcov-merged/cobertura.xml | grep -oP '[0-9].[0-9]*' > grepcov.txt
+    - perl -e 'print '`cat grepcov.txt`'*100' > prcnt
+    - echo ${PLATO_ENGINE_FOLDER_PATTERN}' Percentage Covered '`cat prcnt`
+  artifacts:
+    when: always
+    expire_in: 1 week
+    paths:
+      - "${COVERAGE_DIR}"
+
+# Job template to report coverage percentage.
+.coverage-report:
+  rules:
+    - if: $CONFIGURATION == "cpu-debug"
+  needs: ["coverage-platoengine"]
+  variables:
+    COVERAGE_DIR: "${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/coverage_platoengine/"
+  script:
+    - cd ${COVERAGE_DIR}
+    - grep -oP 'coverage line-rate="[0-9].[0-9]*"' ${COVERAGE_DIR}/kcov-merged/cobertura.xml | grep -oP '[0-9].[0-9]*' > grepcov.txt
+    - perl -e 'print '`cat grepcov.txt`'*100' > prcnt
+    - echo 'Percentage Covered '`cat prcnt`
+  coverage: '/Percentage Covered \d+\.\d+/'
+  artifacts:
+    when: always
+    expire_in: 1 week
+    paths:
+      - "${COVERAGE_DIR}"
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: "${COVERAGE_DIR}/kcov-merged/cobertura.xml"

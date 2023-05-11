@@ -1,0 +1,79 @@
+include: 
+  local: ci/variables.yml
+
+# Template for building either platoengine or platoanalyze
+# Expected variables:
+#  PLATO_NAME: Either platoengine or platoanalyze
+#  SPACK_INSTALL_ARGS: Additional install flags for `spack install`, likely just `--only dependencies` for PE
+.build-and-cache:
+  variables:
+    BUILD_JOBS: 16
+  rules:
+    - if: $CONFIGURATION == "gpu"
+      variables:
+        BUILD_JOBS: "8" # Reduce memory and disk usage for gpu builds
+    - when: on_success
+  before_script:
+    - echo "Building ${PLATO_NAME} for branch ${TRIGGER_BRANCH}"
+    - echo "Pipeline source was ${TRIGGER_SOURCE}"
+# For merge request pipelines, merge develop with the source branch,
+# otherwise just checkout the branch.
+    - |
+      if [[ "$TRIGGER_SOURCE" == "merge_request_event" ]]
+      then
+        echo "Merging branch ${TRIGGER_BRANCH} with develop"
+        source utilities/merge-with-develop.sh "$TRIGGER_BRANCH"
+      else
+        source utilities/checkout-branch.sh ${TRIGGER_BRANCH}
+      fi
+    - git submodule foreach git branch # Show branch in output
+  script:
+    - source utilities/build-env.sh
+    - spack concretize -f
+    - spack install ${SPACK_INSTALL_ARGS} -j ${BUILD_JOBS}
+# Uninstall PE/PA so they don't get copied to the spack/opt/spack cache.
+# We will still cache build objects separately that can be installed in later jobs without rebuilding.
+# This also indicates build failure, since it will fail if PE or PA did not install.
+    - spack uninstall -ayfR platoengine
+  artifacts:
+    when: always
+    paths:
+      - ${CI_PROJECT_DIR}/${PLATO_NAME}/spack-build-out.txt
+
+.build-and-cache-engine:
+  timeout: 6 hours
+  extends: .build-and-cache
+  variables:
+    PLATO_NAME: platoengine
+    SPACK_INSTALL_ARGS: "--only dependencies"
+  cache:
+    - key: ${SPACK_DEPENDENCY_KEY}_${CONFIGURATION}
+      paths: 
+        - spack/opt
+      policy: pull-push
+    - key: ${PE_BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
+      paths:
+        - platoengine/spack-*
+      untracked: true
+      policy: push
+
+.build-and-cache-analyze:
+  timeout: 4 hours
+  extends: .build-and-cache
+  variables:
+    PLATO_NAME: platoanalyze
+    SPACK_INSTALL_ARGS: ""
+  cache:
+    - key: ${SPACK_DEPENDENCY_KEY}_${CONFIGURATION}
+      paths:
+        - spack/opt
+      policy: pull
+    - key: ${PE_BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
+      paths:
+        - platoengine/spack-*
+      policy: pull
+    - key: ${PA_BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
+      paths:
+        - platoanalyze/spack-*
+      untracked: true
+      policy: push

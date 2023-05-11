@@ -1,0 +1,44 @@
+include: 
+  local: ci/variables.yml
+
+# Merges TRIGGER_BRANCH with develop for merge request pipelines.
+# This has to be repeated in other jobs, but this job exists so that if the merge fails,
+# it's clear that it failed due to merge conflicts.
+.merge-with-develop:
+  rules:
+    - if: $TRIGGER_SOURCE == "merge_request_event"
+  script:
+    - echo "Merging branch ${TRIGGER_BRANCH} with develop"
+    - source utilities/merge-with-develop.sh "$TRIGGER_BRANCH"
+
+# Creates a new spack environment for CONFIGURATION.
+# CONFIGURATION must match a supported spec file in utilities/spack.
+.setup-local-spack-installation:
+  before_script:
+    - echo "Setting up spack"
+    - echo "Trigger branch is ${TRIGGER_BRANCH}"
+    - echo "Trigger source is ${TRIGGER_SOURCE}"
+    - |
+      if [[ "$TRIGGER_SOURCE" == "merge_request_event" ]]
+      then
+        echo "Merging branch ${TRIGGER_BRANCH} with develop"
+        source utilities/merge-with-develop.sh "$TRIGGER_BRANCH"
+      else
+        source utilities/checkout-branch.sh ${TRIGGER_BRANCH}
+      fi
+    - git submodule foreach git branch # Show branch in output
+  script:
+    - source utilities/setup-env.sh ${CONFIGURATION} ${GPU_ARCHITECTURE}
+    - spack mirror add esp-mirror ${RUNNER_HOME}/${SPACK_MIRROR_DIR}
+  artifacts:
+    when: always
+    paths: 
+      - spack.yaml
+
+# Deletes all temporary build caches, i.e. PE and PA build objects.
+# The cache containing all dependencies is persistent.
+.clean-build-caches:
+  when: always
+  script:
+    - rm -rf ${RUNNER_HOME}/cache/${CI_PROJECT_PATH}/${PE_BUILD_CACHE_KEY}_${CI_PIPELINE_ID}-*
+    - rm -rf ${RUNNER_HOME}/cache/${CI_PROJECT_PATH}/${PA_BUILD_CACHE_KEY}_${CI_PIPELINE_ID}-*
