@@ -19,7 +19,7 @@ source utilities/checkout-develop.sh
 source utilities/setup-env.sh <build configuration> [CUDA architecture]
 ```
 This will clone and checkout all submodules, as well as set up a spack environment for a cpu build.
-The `setup-env.sh` script accepts `cpu`, `gpu`, and `gpu-slim` build configurations, and the `gpu` options require a CUDA architecture argument.
+The `setup-env.sh` script accepts `cpu`, `cpu-python-app`, `cpu-debug`, `dakota`, `gpu`, and `gpu-slim` build configurations, and the `gpu` options require a CUDA architecture argument.
 The `gpu-slim` spec builds platoanalyze without hex elements and all penalization methods for a faster build.
 
 After the initial clone, each submodule may be in a detached head state, and so the `checkout-develop.sh` script may be used to checkout the main development branches of each repo.
@@ -30,18 +30,26 @@ source utilities/chain-installation.sh /path/to/existing/installation
 ```
 The path should be to the parent of the spack directory containing the installation.
 
-After the intial setup, an existing environment can be initialized using `utilities/build-env.sh` or `utilities/test-env.sh`.
+After the initial setup, an existing environment can be initialized using `utilities/build-env.sh` or `utilities/test-env.sh`.
 The main difference is that `test-env.sh` will load platoengine and platoanalyze to your path.
 
 ## Managing branches
 
 Since each repository is a submodule, `git submodule foreach` can be used to manage branches and common git operations.
+However, a few scripts are also provided to simplify common operations.
 For example, checking out a new branch in each repository can be accomplished with
 ```
-git submodule foreach git checkout -b branch_name
+source utilities/create-branch.sh <branch-name>
 ```
-Changes in each repository can be pushed to the remote by 
+This creates a branch with the same name in each repository and checks it out.
+Existing branches can be checked out using
 ```
-git submodule foreach git push origin HEAD
+source utilities/checkout-branch.sh <branch-name>
 ```
+which will checkout the branch if it exists, and checkout and pull the default branch if it does not exist.
 
+## CI and merge requests
+
+CI for Plato is run out of this repository and only runs for merge requests and manual triggers from the web interface.
+For multi-repo merges, each branch must have the same name, which can be done using the `create-branch.sh` script.
+For a merge request, the pipeline will attempt to checkout a branch with the name of the source branch in each repo, falling back on the default branch if it doesn't exist.
