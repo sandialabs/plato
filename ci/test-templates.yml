@@ -12,6 +12,14 @@ include:
     KCOV_EXCLUDE_PATTERNS: "_UnitTester.cpp,/usr/include/,/usr/lib,googletest,/unittest/"
   before_script:
     - echo "Unit testing platoengine for branch ${TRIGGER_BRANCH}"
+    - |
+      if [[ "$TRIGGER_SOURCE" == "merge_request_event" ]]
+      then
+        echo "Merging branch ${TRIGGER_BRANCH} with develop"
+        source utilities/merge-with-develop.sh "$TRIGGER_BRANCH"
+      else
+        source utilities/checkout-branch.sh ${TRIGGER_BRANCH}
+      fi
     - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
     - source utilities/build-env.sh
     - spack install --only dependencies # Reinstall from build cache
@@ -52,6 +60,14 @@ include:
     CTEST_LOG: "Testing/Temporary/LastTest.log"
   before_script:
     - echo "Unit testing platoengine for branch ${TRIGGER_BRANCH}"
+    - |
+      if [[ "$TRIGGER_SOURCE" == "merge_request_event" ]]
+      then
+        echo "Merging branch ${TRIGGER_BRANCH} with develop"
+        source utilities/merge-with-develop.sh "$TRIGGER_BRANCH"
+      else
+        source utilities/checkout-branch.sh ${TRIGGER_BRANCH}
+      fi
     - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
     - source utilities/build-env.sh
     - spack install # Reinstall from build cache
@@ -111,6 +127,14 @@ include:
     - when: on_success
   before_script:
     - echo "Testing ${PLATO_NAME} for branch ${TRIGGER_BRANCH}"
+    - |
+      if [[ "$TRIGGER_SOURCE" == "merge_request_event" ]]
+      then
+        echo "Merging branch ${TRIGGER_BRANCH} with develop"
+        source utilities/merge-with-develop.sh "$TRIGGER_BRANCH"
+      else
+        source utilities/checkout-branch.sh ${TRIGGER_BRANCH}
+      fi
     - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
     - source utilities/build-env.sh
     - spack install ${SPACK_INSTALL_ARGS} # Reinstall from build cache
