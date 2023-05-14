@@ -18,12 +18,19 @@ setup-spack:
   - job: "merge-develop"
     optional: true
 
+build-dependencies:
+  stage: build
+  extends: .build-and-cache-dependencies
+  tags:
+    - ${CONFIGURATION}
+  needs: ["setup-spack"]
+
 build-platoengine:
   stage: build
   extends: .build-and-cache-engine
   tags:
     - ${CONFIGURATION}
-  needs: ["setup-spack"]
+  needs: ["build-dependencies"]
 
 build-platoanalyze:
   stage: build
