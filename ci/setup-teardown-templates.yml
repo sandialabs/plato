@@ -32,6 +32,7 @@ include:
     - spack mirror add esp-mirror ${RUNNER_HOME}/${SPACK_MIRROR_DIR}
   artifacts:
     when: always
+    untracked: true # For spack env files
     paths: 
       - spack.yaml
 
@@ -41,4 +42,3 @@ include:
   when: always
   script:
     - rm -rf ${RUNNER_HOME}/cache/${CI_PROJECT_PATH}/${PE_BUILD_CACHE_KEY}_${CI_PIPELINE_ID}-*
-    - rm -rf ${RUNNER_HOME}/cache/${CI_PROJECT_PATH}/${PA_BUILD_CACHE_KEY}_${CI_PIPELINE_ID}-*

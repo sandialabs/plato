@@ -3,7 +3,6 @@ variables:
   RUNNER_HOME: /home/gitlab-runner
   SPACK_DEPENDENCY_KEY: spack_dependency_cache
   PE_BUILD_CACHE_KEY: platoengine_build_cache
-  PA_BUILD_CACHE_KEY: platoanalyze_build_cache
   SPACK_MIRROR_DIR: plato-ci-dependency-mirror
   REPORTS_ARTIFACTS_DIR: reports-dir
   KCOV_DIR: ${RUNNER_HOME}/kcov
