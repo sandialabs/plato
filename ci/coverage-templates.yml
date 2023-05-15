@@ -34,7 +34,6 @@ include:
 .coverage-report:
   rules:
     - if: $CONFIGURATION == "cpu-debug"
-  needs: ["coverage-platoengine"]
   variables:
     COVERAGE_DIR: "${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/coverage_platoengine/"
   script:
