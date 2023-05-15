@@ -32,12 +32,12 @@ build-platoengine:
     - ${CONFIGURATION}
   needs: ["build-dependencies"]
 
-# build-platoanalyze:
-#   stage: build
-#   extends: .build-and-cache-analyze
-#   tags:
-#     - ${CONFIGURATION}
-#   needs: ["build-platoengine"]
+build-platoanalyze:
+  stage: build
+  extends: .build-and-cache-analyze
+  tags:
+    - ${CONFIGURATION}
+  needs: ["build-platoengine"]
 
 generate-platoengine-unittests:
   stage: build
