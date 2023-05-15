@@ -83,3 +83,35 @@ include:
         - platoanalyze/spack-*
         - spack/opt
       policy: pull-push
+
+# Template for generating unit test jobs for a dynamic child pipeline.
+# This searches the PE installation path for executables with `UnitTest`
+# in their name and creates a matrix job to run them.
+.generate-platoengine-unittests:
+  variables:
+    CHILD_PIPELINE_TEMPLATE: ci/detail/unittest-child-pipeline.yml.in 
+    CHILD_PIPELINE_FILE: unittest-pipeline.yml
+  before_script:
+    - echo "Unit testing platoengine for branch ${TRIGGER_BRANCH}"
+    - source utilities/test-env.sh || true 
+  script:
+    - PLATOENGINE_DIR=$(spack location -i platoengine)
+    - UNIT_TESTERS=$(find "$PLATOENGINE_DIR"/bin -name "*UnitTest*" -printf "%f, ")
+    - UNIT_TESTERS="${UNIT_TESTERS::-2}"
+    - UNIT_TESTERS_FOR_KCOV=$(echo $UNIT_TESTERS | sed 's/,//g')
+    - COVERAGE_BASE_DIRS=$(find platoengine/base/src/* -maxdepth 0 -type d -printf "%f, ")
+    - COVERAGE_APPS_DIRS=$(find platoengine/apps/* -maxdepth 0 -type d -printf "%f, ")
+    - COVERAGE_DIRS="${COVERAGE_BASE_DIRS}${COVERAGE_APPS_DIRS::-2}"
+    - cp ${CHILD_PIPELINE_TEMPLATE} ${CHILD_PIPELINE_FILE}
+    - sed -i "s/UNIT_TESTER_TOKEN/${UNIT_TESTERS}/" ${CHILD_PIPELINE_FILE}
+    - sed -i "s/UNIT_TESTER_FOR_KCOV_TOKEN/${UNIT_TESTERS_FOR_KCOV}/" ${CHILD_PIPELINE_FILE}
+    - sed -i "s/COVERAGE_DIRS_TOKEN/${COVERAGE_DIRS}/" ${CHILD_PIPELINE_FILE}
+  artifacts:
+    paths:
+      - ${CHILD_PIPELINE_FILE}
+  cache:
+    - key: ${PE_BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
+      paths:
+        - platoengine/spack-*
+        - spack/opt
+      policy: pull

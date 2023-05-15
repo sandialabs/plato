@@ -1,4 +1,4 @@
-stages: [setup, build, test, coverage, teardown]
+stages: [setup, build, test, teardown]
 
 include:
   local: ci/*-templates.yml
@@ -32,22 +32,29 @@ build-platoengine:
     - ${CONFIGURATION}
   needs: ["build-dependencies"]
 
-build-platoanalyze:
+# build-platoanalyze:
+#   stage: build
+#   extends: .build-and-cache-analyze
+#   tags:
+#     - ${CONFIGURATION}
+#   needs: ["build-platoengine"]
+
+generate-platoengine-unittests:
   stage: build
-  extends: .build-and-cache-analyze
+  extends: .generate-platoengine-unittests
   tags:
     - ${CONFIGURATION}
   needs: ["build-platoengine"]
 
 unittest-platoengine:
   stage: test
-  parallel:
-    matrix:
-      - PLATO_ENGINE_UNIT_TESTER: [PlatoMainUnitTester, PlatoXMLGenerator_UnitTester, Plato_Operations_UnitTester, PlatoSu2ToExodus_UnitTester, PlatoTools_UnitTester, PlatoModels_UnitTester, PythonAppUnitTester]
-  extends: .unittest-platoengine
-  tags:
-    - ${CONFIGURATION}
-  needs: ["build-platoengine"]
+  variables:
+    CONFIGURATION: ${CONFIGURATION}
+  trigger:
+    include:
+      - artifact: unittest-pipeline.yml
+        job: generate-platoengine-unittests
+    strategy: depend
 
 test-platoengine:
   stage: test
@@ -69,26 +76,6 @@ test-platoanalyze:
   tags:
     - ${CONFIGURATION}
   needs: ["build-platoanalyze"]
-
-merge-coverage-platoengine:
-  stage: coverage
-  extends: .coverage-platoengine
-  parallel:
-    matrix:
-      - PLATO_ENGINE_FOLDER_PATTERN: [platoengine, analyze, data_layer, Filters, input_generator, interface, iso, models, operations, optimize, services, PlatoSubproblemLibrary, proxy, Su2Exodus, tools ]
-  variables:
-    PLATO_ENGINE_UNIT_TESTER: "PlatoMainUnitTester PlatoXMLGenerator_UnitTester Plato_Operations_UnitTester PlatoSu2ToExodus_UnitTester PlatoTools_UnitTester PlatoModels_UnitTester PythonAppUnitTester"
-  tags:
-    - ${CONFIGURATION}
-  needs: ["unittest-platoengine"]
-  when: always
-
-coverage-report:
-  stage: coverage
-  extends: .coverage-report
-  tags:
-    - ${CONFIGURATION}
-  needs: ["merge-coverage-platoengine"]
 
 teardown:
   stage: teardown

@@ -1,0 +1,33 @@
+stages: [unittest, coverage, report]
+
+include:
+  - ci/test-templates.yml
+  - ci/coverage-templates.yml
+
+unittest-platoengine:
+  stage: unittest
+  parallel:
+    matrix:
+      - PLATO_ENGINE_UNIT_TESTER: [UNIT_TESTER_TOKEN]
+  extends: .unittest-platoengine
+  tags:
+    - ${CONFIGURATION}
+
+merge-coverage-platoengine:
+  stage: coverage
+  extends: .coverage-platoengine
+  parallel:
+    matrix:
+      - PLATO_ENGINE_FOLDER_PATTERN: [platoengine, COVERAGE_DIRS_TOKEN]
+  variables:
+    PLATO_ENGINE_UNIT_TESTER: "UNIT_TESTER_FOR_KCOV_TOKEN"
+  tags:
+    - ${CONFIGURATION}
+  when: always
+
+coverage-report:
+  stage: report
+  extends: .coverage-report
+  tags:
+    - ${CONFIGURATION}
+  when: always
