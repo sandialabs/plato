@@ -82,12 +82,3 @@ teardown:
   extends: .clean-build-caches
   tags:
     - ${CONFIGURATION}
-  needs: 
-    - job: "test-platoengine"
-      optional: true
-    - job: "unittest-platoengine"
-      optional: true
-    - job: "test-platoanalyze"
-      optional: true
-    - job: "unittest-platoanalyze"
-      optional: true
