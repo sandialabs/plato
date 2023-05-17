@@ -50,6 +50,7 @@ unittest-platoengine:
   stage: test
   variables:
     CONFIGURATION: ${CONFIGURATION}
+    CACHE_KEY: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
   trigger:
     include:
       - artifact: unittest-pipeline.yml
@@ -82,3 +83,10 @@ teardown:
   extends: .clean-build-caches
   tags:
     - ${CONFIGURATION}
+  needs:
+    - job: "unittest-platoengine"
+    - job: "unittest-platoanalyze"
+    - job: "test-platoengine"
+      optional: true
+    - job: "test-platoanalyze"
+      optional: true

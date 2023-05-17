@@ -37,7 +37,6 @@ include:
     - if [[ "$BUILD_TYPE" == "dependencies" ]]; then spack uninstall -ayfR platoengine; fi
   artifacts:
     when: always
-    untracked: true
     paths:
       - ${CI_PROJECT_DIR}/${BUILD_TYPE}/spack-build-out.txt
 
@@ -52,10 +51,11 @@ include:
       paths: 
         - spack/opt
       policy: pull-push
-    - key: ${PE_BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
+    - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
         - platoengine/spack-*
         - spack/opt
+      untracked: true # For spack env files
       policy: push
 
 .build-and-cache-engine:
@@ -64,10 +64,11 @@ include:
     BUILD_TYPE: platoengine
     SPACK_INSTALL_ARGS: "--only dependencies"
   cache:
-    - key: ${PE_BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
+    - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
         - platoengine/spack-*
         - spack/opt
+      untracked: true # For spack env files
       policy: pull-push
 
 .build-and-cache-analyze:
@@ -77,11 +78,12 @@ include:
     BUILD_TYPE: platoanalyze
     SPACK_INSTALL_ARGS: ""
   cache:
-    - key: ${PE_BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
+    - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
         - platoengine/spack-*
         - platoanalyze/spack-*
         - spack/opt
+      untracked: true # For spack env files
       policy: pull-push
 
 # Template for generating unit test jobs for a dynamic child pipeline.
@@ -93,7 +95,7 @@ include:
     CHILD_PIPELINE_FILE: unittest-pipeline.yml
   before_script:
     - echo "Unit testing platoengine for branch ${TRIGGER_BRANCH}"
-    - source utilities/test-env.sh || true 
+    - source utilities/test-env.sh
   script:
     - PLATOENGINE_DIR=$(spack location -i platoengine)
     - UNIT_TESTERS=$(find "$PLATOENGINE_DIR"/bin -name "*UnitTest*" -printf "%f, ")
@@ -107,11 +109,13 @@ include:
     - sed -i "s/UNIT_TESTER_FOR_KCOV_TOKEN/${UNIT_TESTERS_FOR_KCOV}/" ${CHILD_PIPELINE_FILE}
     - sed -i "s/COVERAGE_DIRS_TOKEN/${COVERAGE_DIRS}/" ${CHILD_PIPELINE_FILE}
   artifacts:
+    untracked: true
     paths:
       - ${CHILD_PIPELINE_FILE}
   cache:
-    - key: ${PE_BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
+    - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
         - platoengine/spack-*
         - spack/opt
+      untracked: true # For spack env files
       policy: pull
