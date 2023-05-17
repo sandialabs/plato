@@ -41,4 +41,4 @@ include:
 .clean-build-caches:
   when: always
   script:
-    - rm -rf ${RUNNER_HOME}/cache/${CI_PROJECT_PATH}/${PE_BUILD_CACHE_KEY}_${CI_PIPELINE_ID}-*
+    - rm -rf ${RUNNER_HOME}/cache/${CI_PROJECT_PATH}/${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}-*

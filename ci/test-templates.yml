@@ -12,8 +12,9 @@ include:
     KCOV_EXCLUDE_PATTERNS: "_UnitTester.cpp,/usr/include/,/usr/lib,googletest,/unittest/"
   before_script:
     - echo "Unit testing platoengine for branch ${TRIGGER_BRANCH}"
+    - echo "Using cache with key ${CACHE_KEY}"
     - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
-    - source utilities/test-env.sh || true 
+    - source utilities/test-env.sh
   script:
     - |
       if [ ${CONFIGURATION} == "cpu-debug" ]
@@ -32,10 +33,11 @@ include:
       junit: 
         - "${GTEST_REPORT_FILE}"
   cache:
-    - key: ${PE_BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
+    - key: ${CACHE_KEY}
       paths:
         - platoengine/spack-*
         - spack/opt
+      untracked: true # For spack env files
       policy: pull
 
 # Template for running platoanalyze unit test executables. 
@@ -47,7 +49,7 @@ include:
   before_script:
     - echo "Unit testing platoengine for branch ${TRIGGER_BRANCH}"
     - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
-    - source utilities/test-env.sh || true 
+    - source utilities/test-env.sh
   script: 
     - BUILD_DIR=$(spack location -b platoanalyze)
     - cd ${BUILD_DIR}/${PA_UNIT_TEST_DIR}
@@ -63,11 +65,12 @@ include:
       junit: 
         - "${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/${CTEST_REPORT_FILE}"
   cache:
-    - key: ${PE_BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
+    - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
         - platoengine/spack-*
         - platoanalyze/spack-*
         - spack/opt
+      untracked: true # For spack env files
       policy: pull
 
 # Template for running platoengine or platoanalyze regression/integration tests.
@@ -100,7 +103,7 @@ include:
     - export PA_TIMING_SCALE=${PA_TIMING_SCALE}
     - export OPTIMISM_DIR=${OPTIMISM_DIR}
     - export PATH=${CUBIT_DIR}:${SIERRA_DIR}:$PATH
-    - source utilities/test-env.sh || true
+    - source utilities/test-env.sh
   script:
     - BUILD_DIR=$(spack location -b ${PLATO_NAME})
     - cd ${BUILD_DIR}
@@ -116,11 +119,12 @@ include:
       junit: 
         - "${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/${GTEST_REPORT_NAME}"
   cache:
-    - key: ${PE_BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
+    - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
         - platoengine/spack-*
         - platoanalyze/spack-*
         - spack/opt
+      untracked: true # For spack env files
       policy: pull
 
 .test-platoengine:
