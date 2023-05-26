@@ -8,7 +8,8 @@ BRANCH_EXISTS=$?
 if [[ ${BRANCH_EXISTS} == 0 ]]
 then
     echo "Merging ${BRANCH} with default"
-    git pull origin "${BRANCH}" --recurse-submodules
+    git fetch origin "${BRANCH}" 
+    git merge "${BRANCH}"
 else
     echo "Did not find ${BRANCH} on remote, not merging"
 fi
