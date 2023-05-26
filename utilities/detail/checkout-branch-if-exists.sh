@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BRANCH=${1}
-git show-ref --verify --quiet refs/heads/${BRANCH}
+git ls-remote --exit-code --heads origin "${BRANCH}"
 branch_exists=$?
 if [[ ${BRANCH_EXISTS} == 0 ]]
 then
