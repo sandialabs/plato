@@ -9,7 +9,7 @@ BRANCH_EXISTS=$?
 if [[ ${BRANCH_EXISTS} == 0 ]]
 then
     echo "Merging ${BRANCH} with default branch ${DEFAULT_BRANCH}"
-    git fetch origin "${BRANCH}"
+    git fetch origin
     git checkout "${BRANCH}"
     git checkout "${DEFAULT_BRANCH}"
     git merge "${BRANCH}"
