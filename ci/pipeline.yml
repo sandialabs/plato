@@ -47,6 +47,10 @@ generate-platoengine-unittests:
   needs: ["build-platoengine"]
 
 unittest-platoengine:
+  rules:
+    - if: $CONFIGURATION == "dakota"
+      when: never
+    - when: on_success
   stage: test
   variables:
     CONFIGURATION: ${CONFIGURATION}
@@ -85,7 +89,9 @@ teardown:
     - ${CONFIGURATION}
   needs:
     - job: "unittest-platoengine"
+      optional: true
     - job: "unittest-platoanalyze"
+      optional: true
     - job: "test-platoengine"
       optional: true
     - job: "test-platoanalyze"

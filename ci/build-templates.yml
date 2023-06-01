@@ -34,7 +34,12 @@ include:
 # Make sure package was installed, if not there was a build error
     - if [[ "$BUILD_TYPE" != "dependencies" ]]; then spack find "${BUILD_TYPE}"; fi
 # Uninstall PE so it doesn't get copied to the spack/opt/spack cache.
-    - if [[ "$BUILD_TYPE" == "dependencies" ]]; then spack uninstall -ayfR platoengine; fi
+    - |
+      if [[ "$BUILD_TYPE" == "dependencies" ]]
+      then 
+        spack uninstall -ayfR platoengine
+        mkdir "$BUILD_TYPE" && cp platoengine/spack-build-out.txt "$BUILD_TYPE"
+      fi
   artifacts:
     when: always
     paths:
@@ -51,6 +56,7 @@ include:
       paths: 
         - spack/opt
       policy: pull-push
+      when: always
     - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
         - platoengine/spack-*
@@ -90,6 +96,10 @@ include:
 # This searches the PE installation path for executables with `UnitTest`
 # in their name and creates a matrix job to run them.
 .generate-platoengine-unittests:
+  rules:
+    - if: $CONFIGURATION == "dakota"
+      when: never
+    - when: on_success
   variables:
     CHILD_PIPELINE_TEMPLATE: ci/detail/unittest-child-pipeline.yml.in 
     CHILD_PIPELINE_FILE: unittest-pipeline.yml
