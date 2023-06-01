@@ -119,7 +119,6 @@ include:
     - sed -i "s/UNIT_TESTER_FOR_KCOV_TOKEN/${UNIT_TESTERS_FOR_KCOV}/" ${CHILD_PIPELINE_FILE}
     - sed -i "s/COVERAGE_DIRS_TOKEN/${COVERAGE_DIRS}/" ${CHILD_PIPELINE_FILE}
   artifacts:
-    untracked: true
     paths:
       - ${CHILD_PIPELINE_FILE}
   cache:
