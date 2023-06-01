@@ -37,8 +37,8 @@ trigger-gpu:
   variables:
     CONFIGURATION: "gpu"
 
-# trigger-dakota:
-#   stage: plato-build-test
-#   extends: .trigger-pipeline
-#   variables:
-#     CONFIGURATION: "dakota"
+trigger-dakota:
+  stage: plato-build-test
+  extends: .trigger-pipeline
+  variables:
+    CONFIGURATION: "dakota"

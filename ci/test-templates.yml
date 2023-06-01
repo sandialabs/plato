@@ -42,6 +42,10 @@ include:
 
 # Template for running platoanalyze unit test executables. 
 .unittest-platoanalyze:
+  rules:
+    - if: $CONFIGURATION == "dakota"
+      when: never
+    - when: on_success
   variables:
     CTEST_REPORT_FILE: "platoanalyze_unittests.xml"
     PA_UNIT_TEST_DIR: "unit_tests"
@@ -87,12 +91,16 @@ include:
     CTEST_EXCLUDE_REGEX: "timing|UnitTest"
     CTEST_LABEL_EXCLUDE: "GPU_only"
     CTEST_NUM_JOBS: "4"
+    CTEST_INCLUDE_REGEX: ".*"
   rules:
     - if: $CONFIGURATION == "gpu"
       variables:
         CTEST_EXCLUDE_REGEX: "UnitTest"
         CTEST_LABEL_EXCLUDE: ""
         CTEST_NUM_JOBS: "1"
+    - if: $CONFIGURATION == "dakota"
+      variables:
+        CTEST_INCLUDE_REGEX: "dakota"
     - if: $CONFIGURATION == "cpu-debug"
       when: never
     - when: on_success
@@ -107,7 +115,7 @@ include:
   script:
     - BUILD_DIR=$(spack location -b ${PLATO_NAME})
     - cd ${BUILD_DIR}
-    - ctest -E "${CTEST_EXCLUDE_REGEX}" -LE "${LABEL_EXCLUDE}" --timeout "${TIMEOUT_IN_SEC}" -j"${CTEST_NUM_JOBS}" --output-junit ${GTEST_REPORT_NAME} || TEST_FAILED=true
+    - ctest -R "${CTEST_INCLUDE_REGEX}" -E "${CTEST_EXCLUDE_REGEX}" -LE "${LABEL_EXCLUDE}" --timeout "${TIMEOUT_IN_SEC}" -j"${CTEST_NUM_JOBS}" --output-junit ${GTEST_REPORT_NAME} || TEST_FAILED=true
     - cp ${GTEST_REPORT_NAME} ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
     - cp ${CTEST_LOG} ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/ 
     - if [[ "${TEST_FAILED}" == "true" ]]; then (exit 1); fi # Fail if ctest failed
