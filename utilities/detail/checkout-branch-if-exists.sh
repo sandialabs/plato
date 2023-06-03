@@ -5,7 +5,7 @@ git ls-remote --exit-code --heads origin "${BRANCH}"
 BRANCH_EXISTS=$?
 if [[ ${BRANCH_EXISTS} == 0 ]]
 then
-    git fetch origin ${BRANCH}
-    git switch ${BRANCH}
+    git fetch origin
+    git checkout ${BRANCH}
     git pull --recurse-submodules
 fi
