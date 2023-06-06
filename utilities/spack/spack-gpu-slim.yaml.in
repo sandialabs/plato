@@ -5,4 +5,4 @@
 spack:
   specs: [platoanalyze@develop+amgx+cuda+enginemesh+esp+mpmd+python+verificationtests+tacho+tpetra+integration_tests
       ^amgx cuda_arch=CUDA_ARCH_TOKEN ^openmpi@4.1.3 ^platoengine@develop+esp+expy+iso+platoproxy+platostatics+prune+regression+sierra_tests+stk+unit_testing
-      ^trilinos~mumps cuda_arch=CUDA_ARCH_TOKEN ^esp@BetaLin]
+      ^trilinos~mumps cuda_arch=CUDA_ARCH_TOKEN]
