@@ -16,16 +16,7 @@ include:
   before_script:
     - echo "Building ${BUILD_TYPE} for branch ${TRIGGER_BRANCH}"
     - echo "Pipeline source was ${TRIGGER_SOURCE}"
-# For merge request pipelines, merge develop with the source branch,
-# otherwise just checkout the branch.
-    - |
-      if [[ "$TRIGGER_SOURCE" == "merge_request_event" ]]
-      then
-        echo "Merging branch ${TRIGGER_BRANCH} with develop"
-        source utilities/merge-with-develop.sh "$TRIGGER_BRANCH"
-      else
-        source utilities/checkout-branch.sh ${TRIGGER_BRANCH}
-      fi
+    - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
     - git submodule foreach git branch # Show branch in output
   script:
     - source utilities/build-env.sh
