@@ -18,14 +18,7 @@ include:
     - echo "Setting up spack"
     - echo "Trigger branch is ${TRIGGER_BRANCH}"
     - echo "Trigger source is ${TRIGGER_SOURCE}"
-    - |
-      if [[ "$TRIGGER_SOURCE" == "merge_request_event" ]]
-      then
-        echo "Merging branch ${TRIGGER_BRANCH} with develop"
-        source utilities/merge-with-develop.sh "$TRIGGER_BRANCH"
-      else
-        source utilities/checkout-branch.sh ${TRIGGER_BRANCH}
-      fi
+    - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
     - git submodule foreach git branch # Show branch in output
   script:
     - source utilities/setup-env.sh ${CONFIGURATION} ${GPU_ARCHITECTURE}
