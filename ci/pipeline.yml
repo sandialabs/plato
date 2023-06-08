@@ -55,6 +55,8 @@ unittest-platoengine:
   variables:
     CONFIGURATION: ${CONFIGURATION}
     CACHE_KEY: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
+    TRIGGER_SOURCE: ${TRIGGER_SOURCE}
+    TRIGGER_BRANCH: ${TRIGGER_BRANCH}
   trigger:
     include:
       - artifact: unittest-pipeline.yml
