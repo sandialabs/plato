@@ -112,7 +112,7 @@ include:
     - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
     - export PA_TIMING_SCALE=${PA_TIMING_SCALE}
     - export OPTIMISM_DIR=${OPTIMISM_DIR}
-    - export PATH=${CUBIT_DIR}:${SIERRA_DIR}:$PATH
+    - export PATH=${CUBIT_DIR}:$PATH
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
     - source utilities/test-env.sh
   script:
