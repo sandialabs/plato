@@ -28,8 +28,8 @@ include:
     - |
       if [[ "$BUILD_TYPE" == "dependencies" ]]
       then 
-        spack uninstall -ayfR platoengine
         mkdir "$BUILD_TYPE" && cp platoengine/spack-build-out.txt "$BUILD_TYPE"
+        spack uninstall -ayfR platoengine
       fi
   artifacts:
     when: always
