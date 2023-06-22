@@ -16,7 +16,7 @@ include:
     - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
     - ./utilities/detail/update-all-remotes-token.sh ${CI_JOB_TOKEN}
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
-    - source utilities/test-env.sh
+    - source utilities/test-env.sh || true
   script:
     - |
       if [ ${CONFIGURATION} == "cpu-debug" ]
@@ -98,7 +98,6 @@ include:
   rules:
     - if: $CONFIGURATION == "gpu"
       variables:
-        CTEST_EXCLUDE_REGEX: "UnitTest"
         CTEST_LABEL_EXCLUDE: ""
         CTEST_NUM_JOBS: "1"
     - if: $CONFIGURATION == "dakota"
@@ -114,7 +113,7 @@ include:
     - export OPTIMISM_DIR=${OPTIMISM_DIR}
     - export PATH=${CUBIT_DIR}:$PATH
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
-    - source utilities/test-env.sh
+    - source utilities/test-env.sh || true
   script:
     - BUILD_DIR=$(spack location -b ${PLATO_NAME})
     - cd ${BUILD_DIR}
@@ -147,3 +146,19 @@ include:
   extends: .test-plato
   variables:
     PLATO_NAME: platoanalyze
+
+.test-platoanalyze-timing:
+  extends: .test-plato
+  allow_failure: true
+  variables:
+    PLATO_NAME: platoanalyze
+  rules:
+    - if: $CONFIGURATION == "gpu"
+      variables:
+        CTEST_EXCLUDE_REGEX: "UnitTest"
+        CTEST_INCLUDE_REGEX: "timing"
+        CTEST_LABEL_EXCLUDE: ""
+        CTEST_NUM_JOBS: "1"
+      when: on_success
+    - when: never
+ 

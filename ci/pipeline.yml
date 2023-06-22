@@ -84,6 +84,13 @@ test-platoanalyze:
     - ${CONFIGURATION}
   needs: ["build-platoanalyze"]
 
+test-platoanalyze-timing:
+  stage: test
+  extends: .test-platoanalyze-timing
+  tags:
+    - ${CONFIGURATION}
+  needs: ["build-platoanalyze"]
+
 teardown:
   stage: teardown
   extends: .clean-build-caches
@@ -98,3 +105,6 @@ teardown:
       optional: true
     - job: "test-platoanalyze"
       optional: true
+    - job: "test-platoanalyze-timing"
+      optional: true
+
