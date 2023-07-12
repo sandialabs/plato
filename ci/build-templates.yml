@@ -6,13 +6,6 @@ include:
 #  BUILD_TYPE: Either dependencies, platoengine or platoanalyze
 #  SPACK_INSTALL_ARGS: Additional install flags for `spack install`, likely just `--only dependencies` for PE
 .build-and-cache:
-  variables:
-    BUILD_JOBS: "16"
-  rules:
-    - if: $CONFIGURATION == "gpu"
-      variables:
-        BUILD_JOBS: "8" # Reduce memory and disk usage for gpu builds
-    - when: on_success
   before_script:
     - echo "Building ${BUILD_TYPE} for branch ${TRIGGER_BRANCH}"
     - echo "Pipeline source was ${TRIGGER_SOURCE}"
@@ -21,7 +14,7 @@ include:
   script:
     - source utilities/build-env.sh
     - spack concretize -f
-    - spack install ${SPACK_INSTALL_ARGS} -j ${BUILD_JOBS}
+    - spack install ${SPACK_INSTALL_ARGS}
 # Make sure package was installed, if not there was a build error
     - if [[ "$BUILD_TYPE" != "dependencies" ]]; then spack find "${BUILD_TYPE}"; fi
 # Uninstall PE so it doesn't get copied to the spack/opt/spack cache.
