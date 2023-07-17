@@ -54,3 +54,7 @@ which will checkout the branch if it exists, and checkout and pull the default b
 CI for Plato is run out of this repository and only runs for merge requests and manual triggers from the web interface.
 For multi-repo merges, each branch must have the same name, which can be done using the `create-branch.sh` script.
 For a merge request, the pipeline will attempt to checkout a branch with the name of the source branch in each repo, falling back on the default branch if it doesn't exist.
+
+Note that for open merge requests, any push to the Gitlab server will launch a new pipeline.
+If you don't need a pipeline to run, `[ci skip]` can be appended to commit messages and no new pipelines will be launched.
+These pipelines are considered failing, and so merge requests will still require a subsequent passing pipeline.
