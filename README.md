@@ -13,7 +13,7 @@ module load cde/v3/git-lfs/2.11.0
 
 Then, clone this repository using the `--recursive` option and set up a spack environment as:
 ```
-git clone git@cee-gitlab.sandia.gov:plato/super-plato.git --recursive
+git clone git@cee-gitlab.sandia.gov:1540-compsim/plato/super-plato.git --recursive
 cd super-plato
 source utilities/checkout-develop.sh
 source utilities/setup-env.sh <build configuration> [CUDA architecture]
