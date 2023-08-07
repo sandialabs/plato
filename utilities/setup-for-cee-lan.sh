@@ -12,7 +12,7 @@ then
   else
     echo "Could not find cee-lan installation at /projects/plato/automated-builds/${CONFIGURATION}"
     echo "Available installations are:"
-    ls /projects/plato/automated-builds/
+    ls /projects/plato/automated-builds/ | grep -v spack-mirror
   fi
 else
   echo "Can't find utilities directory. This script must be run from super-plato."
