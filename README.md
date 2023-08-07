@@ -11,6 +11,9 @@ module load cde/v3/git/2.35.2
 module load cde/v3/git-lfs/2.11.0
 ```
 
+Also, if you are running `git lfs` for the first time on a system, `git lfs install` must be run before cloning this repo.
+If it is not run, files managed by LFS will be downloaded as text-based pointer files.
+This only has to be done once per system as it modifies your git configuration.
 
 ### General
 
