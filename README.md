@@ -11,6 +11,9 @@ module load cde/v3/git/2.35.2
 module load cde/v3/git-lfs/2.11.0
 ```
 
+
+### General
+
 Then, clone this repository using the `--recursive` option and set up a spack environment as:
 ```
 git clone git@cee-gitlab.sandia.gov:1540-compsim/plato/super-plato.git --recursive
@@ -33,6 +36,21 @@ The path should be to the parent of the spack directory containing the installat
 
 After the initial setup, an existing environment can be initialized using `utilities/build-env.sh` or `utilities/test-env.sh`.
 The main difference is that `test-env.sh` will load platoengine and platoanalyze to your path.
+
+### CEE-LAN
+
+An automated build of Plato is available at `/projects/plato/automated-builds`. 
+Different configurations are contained in separate directories, such as `cpu` and `gpu`.
+A script is available to set up a build area using the pre-built dependencies.
+```
+git clone git@cee-gitlab.sandia.gov:1540-compsim/plato/super-plato.git --recursive
+cd super-plato
+source utilities/checkout-develop.sh
+source utilities/setup-for-cee-lan.sh <build configuration>
+```
+The option `<build configuration>` must match one of the automated build configurations in `/projects/plato/automated-builds`.
+This will setup a `spack.yaml` using the same spec and compiler and also chain your new installation to the installation in the `projects` directory.
+Note that you are still free to edit your `spack.yaml` file, but doing so may result in new dependencies being built.
 
 ## Managing branches
 
