@@ -46,7 +46,7 @@ A script is available to set up a build area using the pre-built dependencies.
 git clone git@cee-gitlab.sandia.gov:1540-compsim/plato/super-plato.git --recursive
 cd super-plato
 source utilities/checkout-develop.sh
-source utilities/setup-for-cee-lan.sh <build configuration>
+source utilities/setup-for-cee-lan.sh <build configuration> [CUDA architecture]
 ```
 The option `<build configuration>` must match one of the automated build configurations in `/projects/plato/automated-builds`.
 This will setup a `spack.yaml` using the same spec and compiler and also chain your new installation to the installation in the `projects` directory.

@@ -3,7 +3,8 @@
 if [[ -d "utilities" ]]
 then
   CONFIGURATION=${1}
-  source utilities/setup-env.sh ${CONFIGURATION}
+  CUDA_ARCH=${2}
+  source utilities/setup-env.sh ${CONFIGURATION} ${CUDA_ARCH}
   SIERRA_GCC_DIR=$(utilities/sierra-gcc-dir.sh)
   spack compiler find "${SIERRA_GCC_DIR}"
   if [[ -d /projects/plato/automated-builds/${CONFIGURATION} ]]
