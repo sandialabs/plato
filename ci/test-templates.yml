@@ -45,7 +45,7 @@ include:
 # Template for running platoanalyze unit test executables. 
 .unittest-platoanalyze:
   rules:
-    - if: $CONFIGURATION == "dakota"
+    - if: $SKIP_PA_UNIT_TESTS == "true"
       when: never
     - when: on_success
   variables:
@@ -93,30 +93,32 @@ include:
     PA_TIMING_SCALE: "2.0"
     CTEST_EXCLUDE_REGEX: "timing|UnitTest"
     CTEST_LABEL_EXCLUDE: "GPU_only"
-    CTEST_NUM_JOBS: "4"
+    CTEST_NUM_JOBS: "8"
     CTEST_INCLUDE_REGEX: ".*"
   rules:
+    - if: $SKIP_PE_REGRESSION_TESTS == "true" && $PLATO_NAME == "platoengine"
+      when: never
+    - if: $SKIP_PA_REGRESSION_TESTS == "true" && $PLATO_NAME == "platoanalyze"
+      when: never
     - if: $CONFIGURATION == "gpu"
       variables:
         CTEST_LABEL_EXCLUDE: ""
         CTEST_NUM_JOBS: "1"
-    - if: $CONFIGURATION == "dakota"
-      variables:
-        CTEST_INCLUDE_REGEX: "dakota"
-    - if: $CONFIGURATION == "cpu-debug"
-      when: never
     - when: on_success
   before_script:
     - echo "Testing ${PLATO_NAME} for branch ${TRIGGER_BRANCH}"
     - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
     - export PA_TIMING_SCALE=${PA_TIMING_SCALE}
-    - export OPTIMISM_DIR=${OPTIMISM_DIR}
     - export PATH=${CUBIT_DIR}:$PATH
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
     - source utilities/test-env.sh || true
   script:
     - BUILD_DIR=$(spack location -b ${PLATO_NAME})
     - cd ${BUILD_DIR}
+    - echo "Test Labels "
+    - echo "CTest Include Regex ${CTEST_INCLUDE_REGEX}"
+    - echo "CTest Exclude Regex ${CTEST_EXCLUDE_REGEX}"
+    - echo "Label Exclude ${LABEL_EXCLUDE}"
     - ctest -R "${CTEST_INCLUDE_REGEX}" -E "${CTEST_EXCLUDE_REGEX}" -LE "${LABEL_EXCLUDE}" --timeout "${TIMEOUT_IN_SEC}" -j"${CTEST_NUM_JOBS}" --output-junit ${GTEST_REPORT_NAME} || TEST_FAILED=true
     - cp ${GTEST_REPORT_NAME} ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
     - cp ${CTEST_LOG} ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/ 
