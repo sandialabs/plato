@@ -48,7 +48,7 @@ generate-platoengine-unittests:
 
 unittest-platoengine:
   rules:
-    - if: $CONFIGURATION == "dakota"
+    - if: $SKIP_PE_UNIT_TESTS == "true"
       when: never
     - when: on_success
   stage: test

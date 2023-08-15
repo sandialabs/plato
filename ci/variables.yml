@@ -7,4 +7,3 @@ variables:
   REPORTS_ARTIFACTS_DIR: reports-dir
   KCOV_DIR: ${RUNNER_HOME}/kcov
   CUBIT_DIR: /opt/cubit/16.02
-  OPTIMISM_DIR: ${RUNNER_HOME}/optimism

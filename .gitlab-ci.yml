@@ -30,6 +30,8 @@ trigger-cpu-debug:
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "cpu-debug"
+    SKIP_PA_REGRESSION_TESTS: "true"
+    SKIP_PE_REGRESSION_TESTS: "true"
 
 trigger-gpu:
   stage: plato-build-test
@@ -42,3 +44,17 @@ trigger-dakota:
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "dakota"
+    CTEST_INCLUDE_REGEX: "dakota"
+    SKIP_PE_UNIT_TESTS: "true"
+    SKIP_PA_UNIT_TESTS: "true"
+
+trigger-optimism:
+  stage: plato-build-test
+  extends: .trigger-pipeline
+  variables:
+    CONFIGURATION: "optimism"
+    SKIP_PE_UNIT_TESTS: "true"
+    SKIP_PA_UNIT_TESTS: "true"
+    SKIP_PA_REGRESSION_TESTS: "true"
+    CTEST_INCLUDE_REGEX: "optimism"
+

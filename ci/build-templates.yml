@@ -9,6 +9,7 @@ include:
   before_script:
     - echo "Building ${BUILD_TYPE} for branch ${TRIGGER_BRANCH}"
     - echo "Pipeline source was ${TRIGGER_SOURCE}"
+    - ssh-agent 
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
     - git submodule foreach git branch # Show branch in output
   script:
@@ -81,7 +82,7 @@ include:
 # in their name and creates a matrix job to run them.
 .generate-platoengine-unittests:
   rules:
-    - if: $CONFIGURATION == "dakota"
+    - if: $SKIP_PE_UNIT_TESTS == "true"
       when: never
     - when: on_success
   variables:
