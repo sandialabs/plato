@@ -1,6 +1,3 @@
-# This is a Spack Environment file.
-#
-# It describes a set of packages to be installed, along with
-# configuration settings.
-spack:
-  specs: [kcov ^binutils@2.37]
+#!/bin/bash
+
+spack add kcov ^binutils@2.37

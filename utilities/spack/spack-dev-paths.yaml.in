@@ -1,8 +1,0 @@
-  view: false
-  develop:
-    platoengine:
-      path: SUPER_PATH_TOKEN/platoengine/
-      spec: platoengine@develop
-    platoanalyze:
-      path: SUPER_PATH_TOKEN/platoanalyze/
-      spec: platoanalyze@develop
