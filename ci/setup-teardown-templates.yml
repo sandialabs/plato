@@ -23,6 +23,7 @@ include:
   script:
     - source utilities/setup-env.sh ${CONFIGURATION} ${GPU_ARCHITECTURE}
     - spack mirror add esp-mirror ${RUNNER_HOME}/${SPACK_MIRROR_DIR}
+    - spack clean -m
   artifacts:
     when: always
     untracked: true # For spack env files
