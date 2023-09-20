@@ -9,7 +9,7 @@
 	url = ../plato-prebuilt-binaries.git
 [submodule "spack"]
 	path = spack
-	url = ../spack.git
+	url = https://github.com/spack/spack.git
 [submodule "plato-spack-repo"]
 	path = plato-spack-repo
-	url = git@cee-gitlab.sandia.gov:1540-compsim/plato/plato-spack-repo.git
+	url = ../plato-spack-repo.git
