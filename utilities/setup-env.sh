@@ -8,6 +8,7 @@ then
   source spack/share/spack/setup-env.sh
   spack env create -d .
   spack env activate .
+  spack repo add plato-spack-repo/plato
 
   # Set up spack.yaml for configuration
   CUDA_ARCH=${2}

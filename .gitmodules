@@ -10,3 +10,6 @@
 [submodule "spack"]
 	path = spack
 	url = ../spack.git
+[submodule "plato-spack-repo"]
+	path = plato-spack-repo
+	url = git@cee-gitlab.sandia.gov:1540-compsim/plato/plato-spack-repo.git
