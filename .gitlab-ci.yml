@@ -45,7 +45,7 @@ trigger-dakota:
   variables:
     CONFIGURATION: "dakota"
     CTEST_INCLUDE_REGEX: "dakota"
-    SKIP_PE_UNIT_TESTS: "true"
+    SKIP_PE_UNIT_TESTS: "false"
     SKIP_PA_UNIT_TESTS: "true"
 
 trigger-optimism:
