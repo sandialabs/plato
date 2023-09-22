@@ -34,7 +34,7 @@ trigger-xtk:
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "xtk"
-    SYSTEM: "cee"
+    SYSTEM: "ascic179"
     EXECUTOR: "shell"
     SKIP_PA_UNIT_TESTS: "true"
     SKIP_PA_REGRESSION_TESTS: "true"
