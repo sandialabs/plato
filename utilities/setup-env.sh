@@ -6,7 +6,7 @@ then
   echo "Setting up spack env at path $SUPER_DIR"
 
   source spack/share/spack/setup-env.sh
-  spack env create -d .
+  spack env create --without-view -d .
   spack env activate .
   spack repo add plato-spack-repo/plato
 
