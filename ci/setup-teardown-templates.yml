@@ -7,6 +7,8 @@ include:
 .merge-with-develop:
   rules:
     - if: $TRIGGER_SOURCE == "merge_request_event"
+  before_script:
+    - source utilities/system-env/${SYSTEM}.sh
   script:
     - echo "Merging branch ${TRIGGER_BRANCH} with develop"
     - git --version
