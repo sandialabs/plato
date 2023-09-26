@@ -2,8 +2,7 @@
 
 if [[ -d "utilities" ]]
 then
-  git submodule foreach ../utilities/detail/merge-with-default-if-exists.sh ${1}
+  ./utilities/plato-submodule-foreach.sh "../utilities/detail/merge-with-default-if-exists.sh ${1}"
 else
   echo "Can't find utilities directory. This script must be run from super-plato."
 fi
-
