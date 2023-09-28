@@ -11,15 +11,13 @@ include:
     - source utilities/system-env/${SYSTEM}.sh
   script:
     - echo "Merging branch ${TRIGGER_BRANCH} with develop"
-    - git --version
-    - git lfs --version
-    - ccache --version || true
     - source utilities/merge-with-develop.sh "$TRIGGER_BRANCH"
 
 # Creates a new spack environment for CONFIGURATION.
 # CONFIGURATION must match a supported spec file in utilities/spack.
 .setup-local-spack-installation:
   before_script:
+    - source utilities/system-env/${SYSTEM}.sh
     - echo "Setting up spack"
     - echo "Trigger branch is ${TRIGGER_BRANCH}"
     - echo "Trigger source is ${TRIGGER_SOURCE}"
