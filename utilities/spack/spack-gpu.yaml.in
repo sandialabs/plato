@@ -1,12 +1,6 @@
 #!/bin/bash
 
-CUDA_ARCH=${1}
-
-if [[ $# -ne 1 ]]; then
-  source utilities/detail/colors.sh
-  echo "${RED}Missing cuda arch parameter, please edit your spack.yaml to set the cuda_arch${NC}"
-  CUDA_ARCH="cuda_arch"
-fi
+source utilities/spack/check-cuda-arch.sh
 
 spack add platoanalyze@develop+all_penalty+amgx+cuda+enginemesh+esp+hex_elements+integration_tests+micromorphic+mpmd+python+tacho+tpetra+verificationtests \
   ^amgx cuda_arch=${CUDA_ARCH} \
