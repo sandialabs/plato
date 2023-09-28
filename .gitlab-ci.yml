@@ -24,7 +24,7 @@ trigger-xtk:
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "xtk"
-    SYSTEM: "ascic179"
+    SYSTEM: "ascicgpu22"
     EXECUTOR: "shell"
     SKIP_PA_UNIT_TESTS: "true"
     SKIP_PA_REGRESSION_TESTS: "true"
