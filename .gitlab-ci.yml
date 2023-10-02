@@ -19,6 +19,32 @@ variables:
     strategy: depend
   needs: []
  
+trigger-cpu:
+  stage: plato-build-test
+  extends: .trigger-pipeline
+  variables:
+    CONFIGURATION: "cpu-python-app"
+    SYSTEM: "gremlin"
+    EXECUTOR: "shell"
+
+trigger-cpu-debug:
+  stage: plato-build-test
+  extends: .trigger-pipeline
+  variables:
+    CONFIGURATION: "cpu-debug"
+    SYSTEM: "gremlin"
+    EXECUTOR: "shell"
+    SKIP_PA_REGRESSION_TESTS: "true"
+    SKIP_PE_REGRESSION_TESTS: "true"
+
+trigger-gpu:
+  stage: plato-build-test
+  extends: .trigger-pipeline
+  variables:
+    CONFIGURATION: "gpu"
+    SYSTEM: "lumbergh"
+    EXECUTOR: "shell"
+
 trigger-dakota:
   stage: plato-build-test
   extends: .trigger-pipeline
@@ -28,6 +54,18 @@ trigger-dakota:
     EXECUTOR: "shell"
     CTEST_INCLUDE_REGEX: "dakota"
     SKIP_PA_UNIT_TESTS: "true"
+
+trigger-optimism:
+  stage: plato-build-test
+  extends: .trigger-pipeline
+  variables:
+    CONFIGURATION: "optimism"
+    SYSTEM: "lumbergh"
+    EXECUTOR: "shell"
+    SKIP_PE_UNIT_TESTS: "true"
+    SKIP_PA_UNIT_TESTS: "true"
+    SKIP_PA_REGRESSION_TESTS: "true"
+    CTEST_INCLUDE_REGEX: "optimism"
 
 trigger-xtk:
   stage: plato-build-test
@@ -40,3 +78,4 @@ trigger-xtk:
     SKIP_PE_UNIT_TESTS: "true"
     SKIP_PA_REGRESSION_TESTS: "true"
     SKIP_PE_REGRESSION_TESTS: "true"
+
