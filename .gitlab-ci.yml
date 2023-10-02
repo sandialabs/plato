@@ -23,10 +23,10 @@ trigger-xtk:
   stage: plato-build-test
   extends: .trigger-pipeline
   variables:
-    CUSTOM_CI_BUILDS_DIR: /fgs/${GITLAB_USER_ID}/jacamar-ci/
     CONFIGURATION: "xtk"
     SYSTEM: "ascic179"
     EXECUTOR: "shell"
     SKIP_PA_UNIT_TESTS: "true"
+    SKIP_PE_UNIT_TESTS: "true"
     SKIP_PA_REGRESSION_TESTS: "true"
     SKIP_PE_REGRESSION_TESTS: "true"

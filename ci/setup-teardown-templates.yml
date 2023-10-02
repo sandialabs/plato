@@ -37,5 +37,8 @@ include:
 # The cache containing all dependencies is persistent.
 .clean-build-caches:
   when: always
+  before_script:
+    - source utilities/system-env/${SYSTEM}.sh
+    - echo "Runner home is ${RUNNER_HOME}"
   script:
     - rm -rf ${RUNNER_HOME}/cache/${CI_PROJECT_PATH}/${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}-*
