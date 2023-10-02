@@ -11,7 +11,8 @@ unittest-platoengine:
       - PLATO_ENGINE_UNIT_TESTER: [UNIT_TESTER_TOKEN]
   extends: .unittest-platoengine
   tags:
-    - ${CONFIGURATION}
+    - ${SYSTEM}
+    - ${EXECUTOR}
 
 merge-coverage-platoengine:
   stage: coverage
@@ -22,12 +23,14 @@ merge-coverage-platoengine:
   variables:
     PLATO_ENGINE_UNIT_TESTER: "UNIT_TESTER_FOR_KCOV_TOKEN"
   tags:
-    - ${CONFIGURATION}
+    - ${SYSTEM}
+    - ${EXECUTOR}
   when: always
 
 coverage-report:
   stage: report
   extends: .coverage-report
   tags:
-    - ${CONFIGURATION}
+    - ${SYSTEM}
+    - ${EXECUTOR}
   when: always

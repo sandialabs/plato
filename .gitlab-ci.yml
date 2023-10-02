@@ -24,12 +24,16 @@ trigger-cpu:
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "cpu-python-app"
+    SYSTEM: "gremlin"
+    EXECUTOR: "shell"
 
 trigger-cpu-debug:
   stage: plato-build-test
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "cpu-debug"
+    SYSTEM: "gremlin"
+    EXECUTOR: "shell"
     SKIP_PA_REGRESSION_TESTS: "true"
     SKIP_PE_REGRESSION_TESTS: "true"
 
@@ -38,14 +42,17 @@ trigger-gpu:
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "gpu"
+    SYSTEM: "lumbergh"
+    EXECUTOR: "shell"
 
 trigger-dakota:
   stage: plato-build-test
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "dakota"
+    SYSTEM: "gremlin"
+    EXECUTOR: "shell"
     CTEST_INCLUDE_REGEX: "dakota"
-    SKIP_PE_UNIT_TESTS: "false"
     SKIP_PA_UNIT_TESTS: "true"
 
 trigger-optimism:
@@ -53,8 +60,22 @@ trigger-optimism:
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "optimism"
+    SYSTEM: "lumbergh"
+    EXECUTOR: "shell"
     SKIP_PE_UNIT_TESTS: "true"
     SKIP_PA_UNIT_TESTS: "true"
     SKIP_PA_REGRESSION_TESTS: "true"
     CTEST_INCLUDE_REGEX: "optimism"
+
+trigger-xtk:
+  stage: plato-build-test
+  extends: .trigger-pipeline
+  variables:
+    CONFIGURATION: "xtk"
+    SYSTEM: "ascic179"
+    EXECUTOR: "shell"
+    SKIP_PA_UNIT_TESTS: "true"
+    SKIP_PE_UNIT_TESTS: "true"
+    SKIP_PA_REGRESSION_TESTS: "true"
+    SKIP_PE_REGRESSION_TESTS: "true"
 

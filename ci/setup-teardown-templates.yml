@@ -7,6 +7,8 @@ include:
 .merge-with-develop:
   rules:
     - if: $TRIGGER_SOURCE == "merge_request_event"
+  before_script:
+    - source utilities/system-env/${SYSTEM}.sh
   script:
     - echo "Merging branch ${TRIGGER_BRANCH} with develop"
     - source utilities/merge-with-develop.sh "$TRIGGER_BRANCH"
@@ -15,6 +17,7 @@ include:
 # CONFIGURATION must match a supported spec file in utilities/spack.
 .setup-local-spack-installation:
   before_script:
+    - source utilities/system-env/${SYSTEM}.sh
     - echo "Setting up spack"
     - echo "Trigger branch is ${TRIGGER_BRANCH}"
     - echo "Trigger source is ${TRIGGER_SOURCE}"
@@ -22,7 +25,7 @@ include:
     - git submodule foreach git branch # Show branch in output
   script:
     - source utilities/setup-env.sh ${CONFIGURATION} ${GPU_ARCHITECTURE}
-    - spack mirror add esp-mirror ${RUNNER_HOME}/${SPACK_MIRROR_DIR}
+    - source utilities/compilers/${SYSTEM}.sh # System-specific compiler set up
     - spack clean -m
   artifacts:
     when: always
@@ -34,5 +37,8 @@ include:
 # The cache containing all dependencies is persistent.
 .clean-build-caches:
   when: always
+  before_script:
+    - source utilities/system-env/${SYSTEM}.sh
+    - echo "Runner home is ${RUNNER_HOME}"
   script:
     - rm -rf ${RUNNER_HOME}/cache/${CI_PROJECT_PATH}/${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}-*

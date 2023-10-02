@@ -12,10 +12,11 @@ then
 
   # Set up spack.yaml for configuration
   CUDA_ARCH=${2}
-  source utilities/spack/spack-${1}.yaml.in ${CUDA_ARCH}
+  source ./utilities/spack/spack-${1}.yaml.in
 
   spack develop -p ${SUPER_DIR}/platoengine platoengine@develop
   spack develop -p ${SUPER_DIR}/platoanalyze platoanalyze@develop
+  spack mirror add ci-mirror ${SUPER_DIR}/plato-prebuilt-binaries/ci-dependency-mirror
 else
   echo "Can't find utilities directory. This script must be run from super-plato."
 fi

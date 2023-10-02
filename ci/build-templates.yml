@@ -7,6 +7,7 @@ include:
 #  SPACK_INSTALL_ARGS: Additional install flags for `spack install`, likely just `--only dependencies` for PE
 .build-and-cache:
   before_script:
+    - source utilities/system-env/${SYSTEM}.sh
     - echo "Building ${BUILD_TYPE} for branch ${TRIGGER_BRANCH}"
     - echo "Pipeline source was ${TRIGGER_SOURCE}"
     - ./utilities/run-ssh-agent.sh

@@ -7,13 +7,15 @@ merge-develop:
   stage: setup
   extends: .merge-with-develop
   tags:
-    - ${CONFIGURATION}
+    - ${SYSTEM}
+    - ${EXECUTOR}
 
 setup-spack:
   stage: setup
   extends: .setup-local-spack-installation
   tags:
-    - ${CONFIGURATION}
+    - ${SYSTEM}
+    - ${EXECUTOR}
   needs: 
   - job: "merge-develop"
     optional: true
@@ -22,28 +24,32 @@ build-dependencies:
   stage: build
   extends: .build-and-cache-dependencies
   tags:
-    - ${CONFIGURATION}
+    - ${SYSTEM}
+    - ${EXECUTOR}
   needs: ["setup-spack"]
 
 build-platoengine:
   stage: build
   extends: .build-and-cache-engine
   tags:
-    - ${CONFIGURATION}
+    - ${SYSTEM}
+    - ${EXECUTOR}
   needs: ["build-dependencies"]
 
 build-platoanalyze:
   stage: build
   extends: .build-and-cache-analyze
   tags:
-    - ${CONFIGURATION}
+    - ${SYSTEM}
+    - ${EXECUTOR}
   needs: ["build-platoengine"]
 
 generate-platoengine-unittests:
   stage: build
   extends: .generate-platoengine-unittests
   tags:
-    - ${CONFIGURATION}
+    - ${SYSTEM}
+    - ${EXECUTOR}
   needs: ["build-platoengine"]
 
 unittest-platoengine:
@@ -54,6 +60,8 @@ unittest-platoengine:
   stage: test
   variables:
     CONFIGURATION: ${CONFIGURATION}
+    SYSTEM: ${SYSTEM}
+    EXECUTOR: ${EXECUTOR}
     CACHE_KEY: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
     TRIGGER_SOURCE: ${TRIGGER_SOURCE}
     TRIGGER_BRANCH: ${TRIGGER_BRANCH}
@@ -67,35 +75,40 @@ test-platoengine:
   stage: test
   extends: .test-platoengine
   tags:
-    - ${CONFIGURATION}
+    - ${SYSTEM}
+    - ${EXECUTOR}
   needs: ["build-platoengine"]
 
 unittest-platoanalyze:
   stage: test
   extends: .unittest-platoanalyze
   tags:
-    - ${CONFIGURATION}
+    - ${SYSTEM}
+    - ${EXECUTOR}
   needs: ["build-platoanalyze"]
 
 test-platoanalyze:
   stage: test
   extends: .test-platoanalyze
   tags:
-    - ${CONFIGURATION}
+    - ${SYSTEM}
+    - ${EXECUTOR}
   needs: ["build-platoanalyze"]
 
 test-platoanalyze-timing:
   stage: test
   extends: .test-platoanalyze-timing
   tags:
-    - ${CONFIGURATION}
+    - ${SYSTEM}
+    - ${EXECUTOR}
   needs: ["build-platoanalyze"]
 
 teardown:
   stage: teardown
   extends: .clean-build-caches
   tags:
-    - ${CONFIGURATION}
+    - ${SYSTEM}
+    - ${EXECUTOR}
   needs:
     - job: "unittest-platoengine"
       optional: true
@@ -107,4 +120,3 @@ teardown:
       optional: true
     - job: "test-platoanalyze-timing"
       optional: true
-

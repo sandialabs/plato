@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CUDA_ARCH=${1}
+source utilities/spack/check-cuda-arch.sh
 
 spack add platoanalyze@develop+amgx+cuda+enginemesh+esp+mpmd+python+verificationtests+tacho+tpetra+integration_tests \
   ^amgx cuda_arch=${CUDA_ARCH} \
