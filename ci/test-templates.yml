@@ -95,7 +95,7 @@ include:
     PA_TIMING_SCALE: "2.0"
     CTEST_EXCLUDE_REGEX: "timing|UnitTest"
     CTEST_LABEL_EXCLUDE: "GPU_only"
-    CTEST_NUM_JOBS: "8"
+    CTEST_NUM_JOBS: "16"
     CTEST_INCLUDE_REGEX: ".*"
   rules:
     - if: $SKIP_PE_REGRESSION_TESTS == "true" && $PLATO_NAME == "platoengine"
