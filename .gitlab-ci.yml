@@ -60,7 +60,7 @@ trigger-optimism:
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "optimism"
-    SYSTEM: "gremlin"
+    SYSTEM: "lumbergh"
     EXECUTOR: "shell"
     SKIP_PE_UNIT_TESTS: "true"
     SKIP_PA_UNIT_TESTS: "true"
