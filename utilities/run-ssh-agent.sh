@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Check if ssh-agent is running for gitlab-runner user
-RUN_COUNT=$(ps aux | grep ssh-agent | grep gitlab | wc -l)
-if [ $RUN_COUNT -lt 2 ] ; then
+RUN_COUNT=$(ps aux | grep [s]sh-agent | grep -v run-ssh-agent | grep gitlab | wc -l)
+echo "Found $RUN_COUNT ssh-agent procs"
+if [ $RUN_COUNT -lt 1 ] ; then
   echo "Starting ssh-agent"
-  ssh-agent
+  eval `ssh-agent`
 else
   echo "ssh-agent is running"
 fi
