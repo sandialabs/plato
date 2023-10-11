@@ -50,7 +50,7 @@ trigger-dakota:
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "dakota"
-    SYSTEM: "ascicgpu22"
+    SYSTEM: "gremlin"
     EXECUTOR: "shell"
     CTEST_INCLUDE_REGEX: "dakota"
     SKIP_PA_UNIT_TESTS: "true"
@@ -60,7 +60,7 @@ trigger-optimism:
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "optimism"
-    SYSTEM: "lumbergh"
+    SYSTEM: "gremlin"
     EXECUTOR: "shell"
     SKIP_PE_UNIT_TESTS: "true"
     SKIP_PA_UNIT_TESTS: "true"
@@ -72,7 +72,7 @@ trigger-xtk:
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "xtk"
-    SYSTEM: "ascic179"
+    SYSTEM: "gremlin"
     EXECUTOR: "shell"
     SKIP_PA_UNIT_TESTS: "true"
     SKIP_PE_UNIT_TESTS: "true"
