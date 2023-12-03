@@ -3,4 +3,5 @@
 spack add platoanalyze@develop~amgx~cuda+enginemesh+esp+mpmd+tacho \
   ^openmpi@4.1.3 \
   ^platoengine@develop~expy+xtk \
+  ^moris~mkl+openblas
   ^trilinos~mumps
