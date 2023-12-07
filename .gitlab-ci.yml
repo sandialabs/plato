@@ -72,7 +72,7 @@ trigger-xtk:
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "xtk"
-    SYSTEM: "gremlin"
+    SYSTEM: "lumbergh"
     EXECUTOR: "shell"
     SKIP_PA_UNIT_TESTS: "true"
     SKIP_PE_UNIT_TESTS: "true"
