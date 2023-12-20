@@ -13,3 +13,6 @@
 [submodule "plato-spack-repo"]
 	path = plato-spack-repo
 	url = ../plato-spack-repo.git
+[submodule "plato-integration-tests"]
+	path = plato-integration-tests
+	url = ../plato-integration-tests

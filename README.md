@@ -19,8 +19,8 @@ This only has to be done once per system as it modifies your git configuration.
 
 Then, clone this repository using the `--recursive` option and set up a spack environment as:
 ```
-git clone git@cee-gitlab.sandia.gov:1540-compsim/plato/super-plato.git --recursive
-cd super-plato
+git clone git@cee-gitlab.sandia.gov:1540-compsim/plato/plato.git --recursive
+cd plato
 source utilities/checkout-develop.sh
 source utilities/setup-env.sh <build configuration> [CUDA architecture]
 ```
@@ -46,8 +46,8 @@ An automated build of Plato is available at `/projects/plato/automated-builds`.
 Different configurations are contained in separate directories, such as `cpu` and `gpu`.
 A script is available to set up a build area using the pre-built dependencies.
 ```
-git clone git@cee-gitlab.sandia.gov:1540-compsim/plato/super-plato.git --recursive
-cd super-plato
+git clone git@cee-gitlab.sandia.gov:1540-compsim/plato/plato.git --recursive
+cd plato
 source utilities/checkout-develop.sh
 source utilities/setup-for-cee-lan.sh <build configuration> [CUDA architecture]
 ```
