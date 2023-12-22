@@ -17,6 +17,7 @@ include:
     - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
     - ./utilities/detail/update-all-remotes-token.sh ${CI_JOB_TOKEN}
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
+    - source utilities/detail/fix-ingegration-tests-submodule.sh
     - source utilities/test-env.sh || true
   script:
     - |
@@ -58,6 +59,7 @@ include:
     - echo "Unit testing platoengine for branch ${TRIGGER_BRANCH}"
     - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
+    - source utilities/detail/fix-ingegration-tests-submodule.sh
     - source utilities/test-env.sh
   script: 
     - BUILD_DIR=$(spack location -b platoanalyze)
@@ -114,6 +116,7 @@ include:
     - export PA_TIMING_SCALE=${PA_TIMING_SCALE}
     - export PATH=${CUBIT_DIR}:$PATH
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
+    - source utilities/detail/fix-ingegration-tests-submodule.sh
     - source utilities/test-env.sh || true
   script:
     - BUILD_DIR=$(spack location -b ${PLATO_NAME})

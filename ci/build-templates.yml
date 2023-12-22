@@ -12,6 +12,7 @@ include:
     - echo "Pipeline source was ${TRIGGER_SOURCE}"
     - ./utilities/run-ssh-agent.sh
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
+    - source utilities/detail/fix-ingegration-tests-submodule.sh
     - git submodule foreach git branch # Show branch in output
   script:
     - source utilities/build-env.sh
@@ -92,6 +93,7 @@ include:
   before_script:
     - echo "Unit testing platoengine for branch ${TRIGGER_BRANCH}"
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
+    - source utilities/detail/fix-ingegration-tests-submodule.sh
     - source utilities/test-env.sh
   script:
     - PLATOENGINE_DIR=$(spack location -i platoengine)
