@@ -1,0 +1,15 @@
+[submodule "platoengine"]
+	path = platoengine
+	url = ../platoengine.git
+[submodule "platoanalyze"]
+	path = platoanalyze
+	url = ../platoanalyze.git
+[submodule "spack"]
+	path = spack
+	url = https://github.com/spack/spack.git
+[submodule "plato-spack-repo"]
+	path = plato-spack-repo
+	url = ../plato-spack-repo.git
+[submodule "plato-integration-tests"]
+	path = plato-integration-tests
+	url = ../plato-integration-tests
