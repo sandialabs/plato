@@ -50,7 +50,7 @@ trigger-dakota:
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "dakota"
-    SYSTEM: "gremlin"
+    SYSTEM: "lumbergh"
     EXECUTOR: "shell"
     CTEST_INCLUDE_REGEX: "dakota"
     SKIP_PA_UNIT_TESTS: "true"
