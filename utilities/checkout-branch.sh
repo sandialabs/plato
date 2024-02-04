@@ -12,6 +12,6 @@ then
   echo -e "\n${GREEN}Submodules are on the following branches:${NC}"
   ./utilities/plato-submodule-foreach.sh "git branch --show-current"
 else
-  echo "Can't find utilities directory. This script must be run from super-plato."
+  echo "Can't find utilities directory. This script must be run from the plato super project directory."
 fi
 
