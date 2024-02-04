@@ -8,5 +8,5 @@ then
   spack load platoengine
   spack load platoanalyze
 else
-  echo "Can't find spack directory. This script must be run from super-plato."
+  echo "Can't find spack directory. This script must be run from the plato super project directory."
 fi
