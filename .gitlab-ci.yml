@@ -66,16 +66,3 @@ trigger-optimism:
     SKIP_PA_UNIT_TESTS: "true"
     SKIP_PA_REGRESSION_TESTS: "true"
     CTEST_INCLUDE_REGEX: "optimism"
-
-trigger-xtk:
-  stage: plato-build-test
-  extends: .trigger-pipeline
-  variables:
-    CONFIGURATION: "xtk"
-    SYSTEM: "lumbergh"
-    EXECUTOR: "shell"
-    SKIP_PA_UNIT_TESTS: "true"
-    SKIP_PE_UNIT_TESTS: "true"
-    SKIP_PA_REGRESSION_TESTS: "true"
-    SKIP_PE_REGRESSION_TESTS: "true"
-
