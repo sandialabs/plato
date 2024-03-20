@@ -1,3 +1,5 @@
 #!/bin/bash
 
-# No-op, uses system compiler
+# Find clang
+spack compiler find /usr/bin
+source utilities/compilers/fix-clang-fortran.sh

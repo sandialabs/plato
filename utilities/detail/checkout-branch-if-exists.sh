@@ -14,7 +14,7 @@ then
 
     git fetch origin
     git switch ${BRANCH}
-    git pull --recurse-submodules
+    git reset --hard origin/${BRANCH}
 
     echo "Restoring remote.origin.fetch ${REMOTE_ORIGIN_FETCH}"
     git config remote.origin.fetch ${REMOTE_ORIGIN_FETCH}
