@@ -6,7 +6,7 @@ variables:
   ARTIFACT_COMPRESSION_LEVEL: fastest
   CACHE_COMPRESSION_LEVEL: fastest
   CLEAN_CACHE: "true"
- 
+
 .trigger-pipeline:
   rules:
     - if: $CI_PIPELINE_SOURCE == "pipeline"
@@ -18,7 +18,19 @@ variables:
     include: ci/pipeline.yml
     strategy: depend
   needs: []
- 
+
+.trigger-quality-check-pipeline:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "pipeline"
+    - if: $CI_PIPELINE_SOURCE == "web"
+  variables:
+    TRIGGER_BRANCH: ${PARENT_BRANCH}
+    TRIGGER_SOURCE: ${PARENT_SOURCE}
+  trigger:
+    include: ci/quality-check-pipeline.yml
+    strategy: depend
+  needs: []
+
 trigger-cpu:
   stage: plato-build-test
   extends: .trigger-pipeline
@@ -36,6 +48,23 @@ trigger-cpu-debug:
     EXECUTOR: "shell"
     SKIP_PA_REGRESSION_TESTS: "true"
     SKIP_PE_REGRESSION_TESTS: "true"
+
+trigger-cpu-clang:
+  stage: plato-build-test
+  extends: .trigger-pipeline
+  variables:
+    CONFIGURATION: "cpu-clang-sanitizers"
+    SYSTEM: "lumbergh"
+    EXECUTOR: "shell"
+    SKIP_PA_REGRESSION_TESTS: "true"
+    SKIP_PE_REGRESSION_TESTS: "true"
+
+trigger-quality-check:
+  stage: plato-build-test
+  extends: .trigger-quality-check-pipeline
+  variables:
+    SYSTEM: "gremlin"
+    EXECUTOR: "shell"
 
 trigger-gpu:
   stage: plato-build-test
