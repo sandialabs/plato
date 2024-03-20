@@ -16,7 +16,7 @@ setup-spack:
   tags:
     - ${SYSTEM}
     - ${EXECUTOR}
-  needs: 
+  needs:
   - job: "merge-develop"
     optional: true
 

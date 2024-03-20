@@ -19,6 +19,7 @@ include:
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
     - source utilities/detail/fix-ingegration-tests-submodule.sh
     - source utilities/test-env.sh || true
+    - source utilities/sanitizer-env.sh ${CI_PROJECT_DIR}/${LSAN_BLACKLIST_FILE}
   script:
     - |
       if [ ${CONFIGURATION} == "cpu-debug" ]
@@ -61,6 +62,7 @@ include:
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
     - source utilities/detail/fix-ingegration-tests-submodule.sh
     - source utilities/test-env.sh
+    - source utilities/sanitizer-env.sh ${CI_PROJECT_DIR}/${LSAN_BLACKLIST_FILE}
   script: 
     - BUILD_DIR=$(spack location -b platoanalyze)
     - cd ${BUILD_DIR}/${PA_UNIT_TEST_DIR}

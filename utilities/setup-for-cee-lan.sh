@@ -5,8 +5,7 @@ then
   CONFIGURATION=${1}
   CUDA_ARCH=${2}
   source utilities/setup-env.sh ${CONFIGURATION} ${CUDA_ARCH}
-  SIERRA_GCC_DIR=$(utilities/sierra-gcc-dir.sh)
-  spack compiler find "${SIERRA_GCC_DIR}"
+  source utilities/compilers/ascic179.sh
   if [[ -d /projects/plato/automated-builds/${CONFIGURATION} ]]
   then
     source utilities/chain-installation.sh /projects/plato/automated-builds/${CONFIGURATION}/plato
