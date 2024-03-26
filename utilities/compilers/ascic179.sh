@@ -10,6 +10,6 @@ module load ${CLANG_MODULE}
 CLANG_EXE_PATH=$(which clang)
 CLANG_DIR=$(dirname ${CLANG_EXE_PATH})
 spack compiler find ${CLANG_DIR}
-source utilities/compilers/fix-clang-fortran.sh
+source utilities/compilers/fix-clang-fortran.sh "${SIERRA_GCC_DIR}"
 module unload ${CLANG_MODULE}
 
