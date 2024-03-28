@@ -30,7 +30,7 @@ then
 	if [ "$FOUND_CLANG_FORMAT" != 0 ]
 	then
 		echo "Clang-format pre-commit hook error:"
-		echo " Cant't find git-clang-format."
+		echo " Can't find git-clang-format."
 		echo " Please load a clang module and make sure clang-format is on your path."
 		exit 1
 	fi
