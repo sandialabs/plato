@@ -15,8 +15,10 @@ else
 	against=$(git hash-object -t tree /dev/null)
 fi
 
-# Only format hpp and cpp files in the functional directory
-REQUIRED_DIRECTORY=functional
+# Only format hpp and cpp files in the functional directories
+# These paths are specific to avoid catching just any file with
+# functional in the name.
+REQUIRED_DIRECTORY="functional\/plato\/\|src\/functional\/"
 FILE_EXTENSION_REGEX=".*\.hpp$\|.*\.cpp$"
 FILES_TO_CHECK=$(git diff --name-only --cached | grep ${REQUIRED_DIRECTORY} | grep ${FILE_EXTENSION_REGEX})
 
