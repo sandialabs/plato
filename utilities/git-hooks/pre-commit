@@ -15,12 +15,19 @@ else
 	against=$(git hash-object -t tree /dev/null)
 fi
 
-# Only format hpp and cpp files in the functional directories
-# These paths are specific to avoid catching just any file with
-# functional in the name.
-REQUIRED_DIRECTORY="functional\/plato\/\|src\/functional\/"
+# Only format hpp and cpp files in the functional directories.
+REPO_PATH=$(git rev-parse --show-toplevel)
+REPO_NAME=$(basename ${REPO_PATH})
+REQUIRED_DIRECTORY=""
+if [ "$REPO_NAME" == "platoengine" ]
+then
+    REQUIRED_DIRECTORY="functional/plato"
+elif [ "$REPO_NAME" == "platoanalyze" ]
+then
+    REQUIRED_DIRECTORY="src/functional"
+fi
 FILE_EXTENSION_REGEX=".*\.hpp$\|.*\.cpp$"
-FILES_TO_CHECK=$(git diff --name-only --cached | grep ${REQUIRED_DIRECTORY} | grep ${FILE_EXTENSION_REGEX})
+FILES_TO_CHECK=$(git diff --name-only --cached ${REQUIRED_DIRECTORY} | grep ${FILE_EXTENSION_REGEX})
 
 exec 1>&2
 
@@ -41,8 +48,8 @@ then
 	if [ "$CLANG_FORMAT_OUTPUT" != "" ]
 	then
 		echo "Clang-format pre-commit hook error:"
-		echo " The files being commited have not been formatted."
-		echo " Please run \"git clang-format\" and re-stage the resulting changes."
+		echo " The files being committed have not been formatted."
+		echo " Please run \"git clang-format ${REPO_PATH}/${REQUIRED_DIRECTORY}\" and re-stage the resulting changes."
 		exit 1
 	fi
 fi
