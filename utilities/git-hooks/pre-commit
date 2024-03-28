@@ -1,0 +1,46 @@
+#!/bin/sh
+#
+# An example hook script to verify what is about to be committed.
+# Called by "git commit" with no arguments.  The hook should
+# exit with non-zero status after issuing an appropriate message if
+# it wants to stop the commit.
+#
+# To enable this hook, rename this file to "pre-commit".
+
+if git rev-parse --verify HEAD >/dev/null 2>&1
+then
+	against=HEAD
+else
+	# Initial commit: diff against an empty tree object
+	against=$(git hash-object -t tree /dev/null)
+fi
+
+# Only format hpp and cpp files in the functional directory
+REQUIRED_DIRECTORY=functional
+FILE_EXTENSION_REGEX=".*\.hpp$\|.*\.cpp$"
+FILES_TO_CHECK=$(git diff --name-only --cached | grep ${REQUIRED_DIRECTORY} | grep ${FILE_EXTENSION_REGEX})
+
+exec 1>&2
+
+if [ "$FILES_TO_CHECK" != "" ]
+then
+    # Check that git-clang-format is available
+    TYPE_RESULT=$(type git-clang-format)
+    FOUND_CLANG_FORMAT=$?
+	if [ "$FOUND_CLANG_FORMAT" != 0 ]
+	then
+		echo "Clang-format pre-commit hook error:"
+		echo " Cant't find git-clang-format."
+		echo " Please load a clang module and make sure clang-format is on your path."
+		exit 1
+	fi
+	# Check that the files being commited have been formatted
+	CLANG_FORMAT_OUTPUT=$(git clang-format --diff -q -- ${FILES_TO_CHECK})
+	if [ "$CLANG_FORMAT_OUTPUT" != "" ]
+	then
+		echo "Clang-format pre-commit hook error:"
+		echo " The files being commited have not been formatted."
+		echo " Please run \"git clang-format\" and re-stage the resulting changes."
+		exit 1
+	fi
+fi
