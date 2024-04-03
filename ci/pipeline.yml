@@ -44,32 +44,21 @@ build-platoanalyze:
     - ${EXECUTOR}
   needs: ["build-platoengine"]
 
-generate-platoengine-unittests:
-  stage: build
-  extends: .generate-platoengine-unittests
+unittest-platoengine:
+  stage: test
+  extends: .unittest-platoengine
   tags:
     - ${SYSTEM}
     - ${EXECUTOR}
   needs: ["build-platoengine"]
 
-unittest-platoengine:
-  rules:
-    - if: $SKIP_PE_UNIT_TESTS == "true"
-      when: never
-    - when: on_success
+unittest-coverage-platoengine:
   stage: test
-  variables:
-    CONFIGURATION: ${CONFIGURATION}
-    SYSTEM: ${SYSTEM}
-    EXECUTOR: ${EXECUTOR}
-    CACHE_KEY: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
-    TRIGGER_SOURCE: ${TRIGGER_SOURCE}
-    TRIGGER_BRANCH: ${TRIGGER_BRANCH}
-  trigger:
-    include:
-      - artifact: unittest-pipeline.yml
-        job: generate-platoengine-unittests
-    strategy: depend
+  extends: .unittest-coverage-platoengine
+  tags:
+    - ${SYSTEM}
+    - ${EXECUTOR}
+  needs: ["build-platoengine"]
 
 test-platoengine:
   stage: test

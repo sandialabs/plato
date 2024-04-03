@@ -1,73 +1,28 @@
 include: 
   local: ci/variables.yml
 
-# Template for running platoengine unit test executables. This also
-# runs kcov to generate coverage reports for the debug build.
-# Expected variables:
-#  PLATO_ENGINE_UNIT_TESTER: The name of the unit test executable
-.unittest-platoengine:
-  variables:
-    GTEST_REPORT_FILE: "${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/${PLATO_ENGINE_UNIT_TESTER}.xml"
-    KCOV_REPORT_DIR: "${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/coverage_${PLATO_ENGINE_UNIT_TESTER}"
-    KCOV_EXCLUDE_PATTERNS: "_UnitTester.cpp,/usr/include/,/usr/lib,googletest,/unittest/"
-  before_script:
-    - source utilities/system-env/${SYSTEM}.sh
-    - echo "Unit testing platoengine for branch ${TRIGGER_BRANCH} from source ${TRIGGER_SOURCE}"
-    - echo "Using cache with key ${CACHE_KEY}"
-    - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
-    - ./utilities/detail/update-all-remotes-token.sh ${CI_JOB_TOKEN}
-    - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
-    - source utilities/detail/fix-ingegration-tests-submodule.sh
-    - source utilities/test-env.sh || true
-    - source utilities/sanitizer-env.sh ${CI_PROJECT_DIR}/${LSAN_BLACKLIST_FILE}
-  script:
-    - |
-      if [ ${CONFIGURATION} == "cpu-debug" ]
-      then
-        mkdir -p ${KCOV_REPORT_DIR}
-        ${KCOV_DIR}/./kcov --include-pattern=platoengine --exclude-pattern=${KCOV_EXCLUDE_PATTERNS} ${KCOV_REPORT_DIR} ${PLATO_ENGINE_UNIT_TESTER} --gtest_output=xml:${GTEST_REPORT_FILE}
-      else
-        ${PLATO_ENGINE_UNIT_TESTER} --gtest_output=xml:${GTEST_REPORT_FILE}
-      fi
-  artifacts:
-    when: always
-    paths:
-      - "${GTEST_REPORT_FILE}"
-      - "${KCOV_REPORT_DIR}"
-    reports:
-      junit: 
-        - "${GTEST_REPORT_FILE}"
-  cache:
-    - key: ${CACHE_KEY}
-      paths:
-        - platoengine/spack-*
-        - spack/opt
-      untracked: true # For spack env files
-      policy: pull
-
-# Template for running platoanalyze unit test executables. 
-.unittest-platoanalyze:
+.unittest-plato:
   rules:
-    - if: $SKIP_PA_UNIT_TESTS == "true"
+    - if: $SKIP_PE_UNIT_TESTS == "true" && $PLATO_NAME == "platoengine"
+      when: never
+    - if: $SKIP_PA_UNIT_TESTS == "true" && $PLATO_NAME == "platoanalyze"
       when: never
     - when: on_success
   variables:
-    CTEST_REPORT_FILE: "platoanalyze_unittests.xml"
-    PA_UNIT_TEST_DIR: "unit_tests"
+    CTEST_REPORT_FILE: "${PLATO_NAME}_All_UnitTester.xml"
     CTEST_LOG: "Testing/Temporary/LastTest.log"
   before_script:
     - source utilities/system-env/${SYSTEM}.sh
-    - echo "Unit testing platoengine for branch ${TRIGGER_BRANCH}"
+    - echo "Unit testing ${PLATO_NAME} for branch ${TRIGGER_BRANCH}"
     - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
-    - source utilities/detail/fix-ingegration-tests-submodule.sh
     - source utilities/test-env.sh
     - source utilities/sanitizer-env.sh ${CI_PROJECT_DIR}/${LSAN_BLACKLIST_FILE}
   script: 
-    - BUILD_DIR=$(spack location -b platoanalyze)
-    - cd ${BUILD_DIR}/${PA_UNIT_TEST_DIR}
-    - ctest -R UnitTest --output-junit ${CTEST_REPORT_FILE} || TEST_FAILED=true
-    - cp ${CTEST_REPORT_FILE} ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
+    - BUILD_DIR=$(spack location -b ${PLATO_NAME})
+    - cd ${BUILD_DIR}
+    - ctest -R UnitTester --output-junit ${CTEST_REPORT_FILE} || TEST_FAILED=true
+    - find . -name "*_UnitTester.xml" -exec cp "{}" ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/ \;
     - cp ${CTEST_LOG} ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/ 
     - if [[ "${TEST_FAILED}" == "true" ]]; then (exit 1); fi # Fail if ctest failed
   artifacts:
@@ -76,7 +31,7 @@ include:
       - "${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}"
     reports:
       junit: 
-        - "${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/${CTEST_REPORT_FILE}"
+        - "${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/*_UnitTester.xml"
   cache:
     - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
@@ -85,6 +40,16 @@ include:
         - spack/opt
       untracked: true # For spack env files
       policy: pull
+
+.unittest-platoengine:
+  extends: .unittest-plato
+  variables:
+    PLATO_NAME: platoengine
+
+.unittest-platoanalyze:
+  extends: .unittest-plato
+  variables:
+    PLATO_NAME: platoanalyze
 
 # Template for running platoengine or platoanalyze regression/integration tests.
 # This does not run for the cpu-debug configuration.
@@ -118,7 +83,6 @@ include:
     - export PA_TIMING_SCALE=${PA_TIMING_SCALE}
     - export PATH=${CUBIT_DIR}:$PATH
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
-    - source utilities/detail/fix-ingegration-tests-submodule.sh
     - source utilities/test-env.sh || true
   script:
     - BUILD_DIR=$(spack location -b ${PLATO_NAME})
