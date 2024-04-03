@@ -17,6 +17,9 @@ then
   spack develop -p ${SUPER_DIR}/platoengine platoengine@develop
   spack develop -p ${SUPER_DIR}/platoanalyze platoanalyze@develop
   spack mirror add ci-mirror ${SUPER_DIR}/plato-prebuilt-binaries/ci-dependency-mirror
+
+  git config --file .git/modules/platoengine/config core.hooksPath ${SUPER_DIR}/utilities/git-hooks
+  git config --file .git/modules/platoanalyze/config core.hooksPath ${SUPER_DIR}/utilities/git-hooks
 else
   echo "Can't find utilities directory. This script must be run from the plato super project directory."
 fi
