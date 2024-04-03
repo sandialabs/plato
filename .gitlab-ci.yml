@@ -46,6 +46,7 @@ trigger-cpu-debug:
     CONFIGURATION: "cpu-debug"
     SYSTEM: "gremlin"
     EXECUTOR: "shell"
+    RUN_COVERAGE_UNIT_TESTS: "true"
     SKIP_PA_REGRESSION_TESTS: "true"
     SKIP_PE_REGRESSION_TESTS: "true"
 

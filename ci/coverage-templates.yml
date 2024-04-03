@@ -1,53 +1,51 @@
 include:
   local: ci/variables.yml
 
-# Job template to merge existing kcov coverage reports.
-.coverage-platoengine:
+# Template for running platoengine unit test executables with kcov for coverage reporting. 
+.unittest-coverage-platoengine:
   rules:
-    - if: $CONFIGURATION == "cpu-debug"
+    - if: $RUN_COVERAGE_UNIT_TESTS == "true"
+      when: on_success
+    - when: never
   variables:
-    COVERAGE_DIR: "${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/coverage_${PLATO_ENGINE_FOLDER_PATTERN}"
+    KCOV_REPORT_DIR: "${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/merged-coverage"
+    KCOV_REPORT_DIR_BASE: "${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/coverage"
+    KCOV_EXCLUDE_PATTERNS: "Test_*.cpp,/integration_tests/,/test_utilities/,/usr/include/,/usr/lib,googletest"
+    KCOV_INCLUDE_PATTERNS: "platoengine/functional"
+    KCOV_COBERTURA_PATH: "kcov-merged/cobertura.xml"
   before_script:
+    - source utilities/system-env/${SYSTEM}.sh
+    - echo "Unit testing for coverage platoengine for branch ${TRIGGER_BRANCH} from source ${TRIGGER_SOURCE}"
     - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
-    - mkdir -p ${COVERAGE_DIR}
+    - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
+    - source utilities/test-env.sh
   script:
-    - ALL_PE_COVERAGE_DIR_STRING=""
+    - PLATOENGINE_DIR=$(spack location -i platoengine)
+    - UNIT_TESTERS=$(find "$PLATOENGINE_DIR"/bin -name "*UnitTest*" -printf "%f ")
     - |
-      for test in ${PLATO_ENGINE_UNIT_TESTER}
-      do
-        ALL_PE_COVERAGE_DIR_STRING="${ALL_PE_COVERAGE_DIR_STRING} ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/coverage_${test} "
+      for TEST in ${UNIT_TESTERS}; do
+        echo "Running ${TEST} for coverage"
+        KCOV_REPORT_DIR_FOR_TEST=${KCOV_REPORT_DIR_BASE}_${TEST}
+        mkdir -p ${KCOV_REPORT_DIR_FOR_TEST}
+        ${KCOV_DIR}/./kcov --include-pattern=${KCOV_INCLUDE_PATTERNS} --exclude-pattern=${KCOV_EXCLUDE_PATTERNS} ${KCOV_REPORT_DIR_FOR_TEST} ${TEST}
       done
-    - echo ${ALL_PE_COVERAGE_DIR_STRING}
-    - echo "Merging KCOV with pattern ${PLATO_ENGINE_FOLDER_PATTERN}"
-    - ${KCOV_DIR}/./kcov --include-pattern=${PLATO_ENGINE_FOLDER_PATTERN} --merge ${COVERAGE_DIR} ${ALL_PE_COVERAGE_DIR_STRING}
-    - cd ${COVERAGE_DIR}
-    - grep -oP 'coverage line-rate="[0-9].[0-9]*"' ${COVERAGE_DIR}/kcov-merged/cobertura.xml | grep -oP '[0-9].[0-9]*' > grepcov.txt
-    - perl -e 'print '`cat grepcov.txt`'*100' > prcnt
-    - echo ${PLATO_ENGINE_FOLDER_PATTERN}' Percentage Covered '`cat prcnt`
-  artifacts:
-    when: always
-    expire_in: 1 week
-    paths:
-      - "${COVERAGE_DIR}"
-
-# Job template to report coverage percentage.
-.coverage-report:
-  rules:
-    - if: $CONFIGURATION == "cpu-debug"
-  variables:
-    COVERAGE_DIR: "${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/coverage_platoengine/"
-  script:
-    - cd ${COVERAGE_DIR}
-    - grep -oP 'coverage line-rate="[0-9].[0-9]*"' ${COVERAGE_DIR}/kcov-merged/cobertura.xml | grep -oP '[0-9].[0-9]*' > grepcov.txt
+    - ALL_REPORT_DIRS=$(find ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR} -maxdepth 1 -name "*UnitTest*")
+    - ${KCOV_DIR}/./kcov --include-pattern=${KCOV_INCLUDE_PATTERNS} --merge ${KCOV_REPORT_DIR} ${ALL_REPORT_DIRS}
+    - grep -oP 'coverage line-rate="[0-9].[0-9]*"' ${KCOV_REPORT_DIR}/${KCOV_COBERTURA_PATH} | grep -oP '[0-9].[0-9]*' > grepcov.txt
     - perl -e 'print '`cat grepcov.txt`'*100' > prcnt
     - echo 'Percentage Covered '`cat prcnt`
   coverage: '/Percentage Covered \d+\.\d+/'
   artifacts:
     when: always
-    expire_in: 1 week
     paths:
-      - "${COVERAGE_DIR}"
+      - "${KCOV_REPORT_DIR}"
     reports:
       coverage_report:
         coverage_format: cobertura
-        path: "${COVERAGE_DIR}/kcov-merged/cobertura.xml"
+        path: "${KCOV_REPORT_DIR}/${KCOV_COBERTURA_PATH}"
+  cache:
+    - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
+      paths:
+        - spack/opt
+      untracked: true # For spack env files
+      policy: pull

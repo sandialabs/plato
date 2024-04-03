@@ -12,7 +12,6 @@ include:
   script:
     - echo "Merging branch ${TRIGGER_BRANCH} with develop"
     - source utilities/merge-with-develop.sh "$TRIGGER_BRANCH"
-    - source utilities/detail/fix-ingegration-tests-submodule.sh
 
 # Creates a new spack environment for CONFIGURATION.
 # CONFIGURATION must match a supported spec file in utilities/spack.
@@ -23,7 +22,6 @@ include:
     - echo "Trigger branch is ${TRIGGER_BRANCH}"
     - echo "Trigger source is ${TRIGGER_SOURCE}"
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
-    - source utilities/detail/fix-ingegration-tests-submodule.sh
     - git submodule foreach git branch # Show branch in output
   script:
     - source utilities/setup-env.sh ${CONFIGURATION} ${GPU_ARCHITECTURE}
