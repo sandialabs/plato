@@ -54,7 +54,7 @@ trigger-cpu-clang:
   stage: plato-build-test
   extends: .trigger-pipeline
   variables:
-    CONFIGURATION: "cpu-clang-sanitizers"
+    CONFIGURATION: "cpu-clang-dev"
     SYSTEM: "lumbergh"
     EXECUTOR: "shell"
     SKIP_PA_REGRESSION_TESTS: "true"
