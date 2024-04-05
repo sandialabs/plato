@@ -24,3 +24,5 @@ leak:mca_bml_r2_allocate_endpoint
 leak:PMIx*
 leak:ext3x_spawn
 leak:opal_argv_copy
+leak:pmix_bfrops_base_value_load
+leak:pmix_hash_fetch
