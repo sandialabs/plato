@@ -43,7 +43,7 @@ The main difference is that `test-env.sh` will load platoengine and platoanalyze
 ### CEE-LAN
 
 An automated build of Plato is available at `/projects/plato/automated-builds`. 
-Different configurations are contained in separate directories, such as `cpu` and `gpu`.
+Different configurations are contained in separate directories, such as `cpu`, `gpu`, and `cpu-clang-dev`.
 A script is available to set up a build area using the pre-built dependencies.
 ```
 git clone git@cee-gitlab.sandia.gov:1540-compsim/plato/plato.git --recursive
