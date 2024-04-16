@@ -26,3 +26,8 @@ leak:ext3x_spawn
 leak:opal_argv_copy
 leak:pmix_bfrops_base_value_load
 leak:pmix_hash_fetch
+leak:*libopen-pal.so*
+leak:*libhwloc.so*
+leak:*libpmix.so*
+leak:*libmpi.so*
+leak:*libc.so*
