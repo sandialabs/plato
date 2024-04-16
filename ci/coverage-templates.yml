@@ -10,7 +10,7 @@ include:
   variables:
     KCOV_REPORT_DIR: "${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/merged-coverage"
     KCOV_REPORT_DIR_BASE: "${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/coverage"
-    KCOV_EXCLUDE_PATTERNS: "/unittests/,/parallel_unittests/,/integration_tests/,/test_utilities/,/usr/include/,/usr/lib,googletest"
+    KCOV_EXCLUDE_PATTERNS: "/unittest/,/parallel_unittest/,/integration_tests/,/test_utilities/,/usr/include/,/usr/lib,googletest"
     KCOV_INCLUDE_PATTERNS: "platoengine/functional"
     KCOV_COBERTURA_PATH: "kcov-merged/cobertura.xml"
   before_script:
