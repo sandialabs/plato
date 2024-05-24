@@ -21,7 +21,7 @@ include:
   script: 
     - BUILD_DIR=$(spack location -b ${PLATO_NAME})
     - cd ${BUILD_DIR}
-    - ctest -R UnitTester --output-junit ${CTEST_REPORT_FILE} || TEST_FAILED=true
+    - ctest -R UnitTest --output-junit ${CTEST_REPORT_FILE} || TEST_FAILED=true
     - find . -name "*_UnitTester.xml" -exec cp "{}" ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/ \;
     - cp ${CTEST_LOG} ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/ 
     - if [[ "${TEST_FAILED}" == "true" ]]; then (exit 1); fi # Fail if ctest failed
