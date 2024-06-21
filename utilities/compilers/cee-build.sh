@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # gcc
-GCC_DIR=$(./utilities/gcc-dir.sh)
+GCC_DIR=$(./utilities/compilers/gcc-dir.sh)
 spack compiler find ${GCC_DIR}
 
 # clang
