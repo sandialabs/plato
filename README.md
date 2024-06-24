@@ -21,8 +21,8 @@ Then, clone this repository using the `--recursive` option and set up a spack en
 ```
 git clone git@cee-gitlab.sandia.gov:1540-compsim/plato/plato.git --recursive
 cd plato
-source utilities/checkout-develop.sh
-source utilities/setup-env.sh -c <build configuration> [-g CUDA architecture] [-a system architecture]
+./utilities/checkout-develop.sh
+./utilities/setup-env.sh -c <build configuration> [-g CUDA architecture] [-a system architecture]
 ```
 This will clone and checkout all submodules, as well as set up a spack environment for a cpu build.
 The `setup-env.sh` script accepts `cpu`, `cpu-clang-dev`, `cpu-python-app`, `cpu-debug`, `dakota`, `gpu`, and `gpu-slim` build configurations, and the `gpu` options require a CUDA architecture argument.
@@ -34,7 +34,7 @@ Note that `checkout-develop.sh` will perform a hard reset, and so if it is used 
 
 To chain the new installation to an existing installation, use the `utilities/chain-installation.sh` script:
 ```
-source utilities/chain-installation.sh /path/to/existing/installation
+./utilities/chain-installation.sh /path/to/existing/installation
 ```
 The path should be to the parent of the spack directory containing the installation.
 
@@ -49,8 +49,8 @@ A script is available to set up a build area using the pre-built dependencies.
 ```
 git clone git@cee-gitlab.sandia.gov:1540-compsim/plato/plato.git --recursive
 cd plato
-source utilities/checkout-develop.sh
-source utilities/setup-for-cee-lan.sh -c <build configuration> [-g CUDA architecture]
+./utilities/checkout-develop.sh
+./utilities/setup-for-cee-lan.sh -c <build configuration> [-g CUDA architecture]
 ```
 The option `<build configuration>` must match one of the automated build configurations in `/projects/plato/automated-builds`.
 This will setup a `spack.yaml` using the same spec and compiler and also chain your new installation to the installation in the `projects` directory.
