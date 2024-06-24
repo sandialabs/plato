@@ -24,7 +24,7 @@ include:
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
     - git submodule foreach git branch # Show branch in output
   script:
-    - source utilities/setup-env.sh ${CONFIGURATION} ${GPU_ARCHITECTURE}
+    - source utilities/setup-env.sh -c ${CONFIGURATION} -g ${GPU_ARCHITECTURE}
     - source utilities/compilers/${SYSTEM}.sh # System-specific compiler set up
     - spack clean -m
   artifacts:
