@@ -2,7 +2,8 @@
 
 if [[ -d "utilities" ]]
 then
-  source utilities/setup-env.sh "$@" -a x86_64
+  CEE_LAN_ARCH=$(./utilities/spack/cee-lan-arch.sh)
+  source utilities/setup-env.sh "$@" -a ${CEE_LAN_ARCH}
   source utilities/compilers/cee-build.sh
   if [[ -d /projects/plato/automated-builds/${CONFIGURATION} ]]
   then
