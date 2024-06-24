@@ -5,7 +5,7 @@ then
   CONFIGURATION=${1}
   CUDA_ARCH=${2}
   source utilities/setup-env.sh ${CONFIGURATION} ${CUDA_ARCH}
-  source utilities/compilers/ascic179.sh
+  source utilities/compilers/cee-build.sh
   if [[ -d /projects/plato/automated-builds/${CONFIGURATION} ]]
   then
     source utilities/chain-installation.sh /projects/plato/automated-builds/${CONFIGURATION}/plato
