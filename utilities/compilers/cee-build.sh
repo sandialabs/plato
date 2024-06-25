@@ -1,19 +1,21 @@
 #!/bin/bash
 
 # gcc
-GCC_DIR=$(./utilities/compilers/gcc-dir.sh)
-spack compiler find ${GCC_DIR}
+GCC_MODULE="aue/gcc/11.4.0"
+./utilities/compilers/add-compiler.sh ${GCC_MODULE} gcc
 
 # clang
 CLANG_MODULE="aue/clang/16.0.6"
-module load ${CLANG_MODULE}
-CLANG_EXE_PATH=$(which clang)
-CLANG_DIR=$(dirname ${CLANG_EXE_PATH})
-spack compiler find ${CLANG_DIR}
+./utilities/compilers/add-compiler.sh ${CLANG_MODULE} clang
 
-source utilities/compilers/add-binutils.sh
-source utilities/compilers/fix-clang-fortran.sh "${GCC_DIR}"
+./utilities/compilers/add-binutils.sh
 
-spack external find --not-buildable --scope env:$(pwd -P) --path ${CLANG_DIR} llvm
+GCC_DIR=$(./utilities/compilers/compiler-dir.sh ${GCC_MODULE} gcc)
+./utilities/compilers/fix-clang-fortran.sh "${GCC_DIR}"
 
-module unload ${CLANG_MODULE}
+./utilities/compilers/find-external-package-from-module.sh ${CLANG_MODULE} clang llvm
+
+# cuda
+CUDA_MODULE="aue/cuda/11.8.0-gcc-10.3.0"
+./utilities/compilers/find-external-package-from-module.sh ${CUDA_MODULE} nvcc cuda
+
