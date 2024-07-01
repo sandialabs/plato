@@ -20,7 +20,7 @@ with open('spack.yaml') as stream:
       compiler_obj['paths']['f77'] = gfortran_path
       compiler_obj['paths']['fc'] = gfortran_path
       compiler_obj['extra_rpaths'] = [gfortran_lib_path]
-      compiler_obj['flags'] = {'fflags': fflags, 'cflags': gcc_toolchain_flag, 'cppflags': gcc_toolchain_flag}
+      compiler_obj['flags'] = {'fflags': fflags, 'cflags': gcc_toolchain_flag, 'cxxflags': gcc_toolchain_flag}
 
 with open('spack.yaml', 'w') as stream:
   yaml.dump(spack_yaml, stream)
