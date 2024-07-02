@@ -2,6 +2,9 @@
 
 if [[ -d "utilities" ]]
 then
+  source utilities/parse-options.sh
+  parse_setup_options "$@"
+
   SUPER_DIR=$(pwd)
   echo "Setting up spack env at path $SUPER_DIR"
 
@@ -11,8 +14,7 @@ then
   spack repo add plato-spack-repo/plato
 
   # Set up spack.yaml for configuration
-  CUDA_ARCH=${2}
-  source ./utilities/spack/spack-${1}.yaml.in
+  source ./utilities/spack/spack-${CONFIGURATION}.sh
 
   spack develop -p ${SUPER_DIR}/platoengine platoengine@develop
   spack develop -p ${SUPER_DIR}/platoanalyze platoanalyze@develop

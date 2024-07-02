@@ -2,10 +2,9 @@
 
 if [[ -d "utilities" ]]
 then
-  CONFIGURATION=${1}
-  CUDA_ARCH=${2}
-  source utilities/setup-env.sh ${CONFIGURATION} ${CUDA_ARCH}
-  source utilities/compilers/ascic179.sh
+  CEE_LAN_ARCH=$(./utilities/spack/cee-lan-arch.sh)
+  source utilities/setup-env.sh "$@" -a ${CEE_LAN_ARCH}
+  source utilities/compilers/cee-build.sh
   if [[ -d /projects/plato/automated-builds/${CONFIGURATION} ]]
   then
     source utilities/chain-installation.sh /projects/plato/automated-builds/${CONFIGURATION}/plato
