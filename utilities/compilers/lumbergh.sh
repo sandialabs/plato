@@ -2,5 +2,5 @@
 
 # Find clang
 spack compiler find /usr/bin
-source utilities/compilers/fix-clang-fortran.sh "/usr/bin"
+./utilities/compilers/fix-clang-fortran.py "/usr/bin" compilers_only
 spack external find --not-buildable --scope env:$(pwd -P) llvm

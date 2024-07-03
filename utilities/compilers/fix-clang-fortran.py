@@ -6,6 +6,7 @@ import yaml
 
 gcc_base_dir = sys.argv[1]
 fflags = sys.argv[2]
+compilers_only = fflags == "compilers_only"
 
 gfortran_path = os.path.join(gcc_base_dir, 'bin', 'gfortran')
 gfortran_lib_path = os.path.join(gcc_base_dir, 'lib64')
@@ -19,8 +20,9 @@ with open('spack.yaml') as stream:
       compiler_obj = compiler['compiler']
       compiler_obj['paths']['f77'] = gfortran_path
       compiler_obj['paths']['fc'] = gfortran_path
-      compiler_obj['extra_rpaths'] = [gfortran_lib_path]
-      compiler_obj['flags'] = {'fflags': fflags, 'cflags': gcc_toolchain_flag, 'cxxflags': gcc_toolchain_flag}
+      if not compilers_only:
+        compiler_obj['extra_rpaths'] = [gfortran_lib_path]
+        compiler_obj['flags'] = {'fflags': fflags, 'cflags': gcc_toolchain_flag, 'cxxflags': gcc_toolchain_flag}
 
 with open('spack.yaml', 'w') as stream:
   yaml.dump(spack_yaml, stream)
