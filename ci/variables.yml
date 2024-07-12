@@ -1,9 +1,0 @@
-variables:
-  GPU_ARCHITECTURE: 70
-  SPACK_DEPENDENCY_KEY: spack_dependency_cache
-  BUILD_CACHE_KEY: platoengine_build_cache
-  REPORTS_ARTIFACTS_DIR: reports-dir
-  LSAN_BLACKLIST_FILE: ci/detail/sanitizer_black_list.txt
-  KCOV_DIR: /home/gitlab-runner/kcov
-  CUBIT_DIR: /opt/cubit/16.02
-  CPD_DIR: /home/gitlab-runner/pmd-bin-7.0.0-rc4/bin

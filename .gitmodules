@@ -4,9 +4,6 @@
 [submodule "platoanalyze"]
 	path = platoanalyze
 	url = ../platoanalyze.git
-[submodule "plato-prebuilt-binaries"]
-	path = plato-prebuilt-binaries
-	url = ../plato-prebuilt-binaries.git
 [submodule "spack"]
 	path = spack
 	url = https://github.com/spack/spack.git
