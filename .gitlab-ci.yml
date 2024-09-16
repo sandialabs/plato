@@ -97,7 +97,7 @@ trigger-optimism:
     SKIP_PA_REGRESSION_TESTS: "true"
     CTEST_INCLUDE_REGEX: "optimism"
 
-trigger-cpu-clang:
+trigger-cpu-snopt:
   stage: plato-build-test
   extends: .trigger-pipeline
   variables:
