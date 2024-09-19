@@ -80,7 +80,7 @@ trigger-dakota:
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "dakota"
-    SYSTEM: "gremlin"
+    SYSTEM: "lumbergh"
     EXECUTOR: "shell"
     CTEST_INCLUDE_REGEX: "dakota"
     SKIP_PA_UNIT_TESTS: "true"
@@ -102,7 +102,7 @@ trigger-cpu-snopt:
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "cpu-snopt"
-    SYSTEM: "lumbergh"
+    SYSTEM: "gremlin"
     EXECUTOR: "shell"
     SKIP_PA_REGRESSION_TESTS: "true"
     SKIP_PE_REGRESSION_TESTS: "true"
