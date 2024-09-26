@@ -32,7 +32,7 @@ include:
     - ALL_REPORT_DIRS=$(find ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR} -maxdepth 1 -name "*UnitTest*")
     - ${KCOV_DIR}/./kcov --include-pattern=${KCOV_INCLUDE_PATTERNS} --merge ${KCOV_REPORT_DIR} ${ALL_REPORT_DIRS}
     - grep -oP 'coverage line-rate="[0-9].[0-9]*"' ${KCOV_REPORT_DIR}/${KCOV_COBERTURA_PATH} | grep -oP '[0-9].[0-9]*' > grepcov.txt
-    - perl -e 'print '`cat grepcov.txt`'*100' > prcnt
+    - perl -e 'printf("%.1f", '`cat grepcov.txt`'*100)' > prcnt
     - echo 'Percentage Covered '`cat prcnt`
   coverage: '/Percentage Covered \d+\.\d+/'
   artifacts:
