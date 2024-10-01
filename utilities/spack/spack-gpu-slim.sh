@@ -5,5 +5,5 @@ source utilities/spack/check-cuda-arch.sh
 spack add platoanalyze@develop+amgx+cuda+enginemesh+esp+mpmd+python+verificationtests+tacho+tpetra+integration_tests ${SYSTEM_ARCH} \
   ^amgx cuda_arch=${CUDA_ARCH} \
   ^openmpi@4.1.3 \
-  ^platoengine@develop+cuda+esp+expy+iso+platoproxy+platostatics+prune+regression+sierra_tests+stk+unit_testing \
+  ^platoengine@develop+cuda+esp+expy+iso+platoproxy+prune+regression+sierra_tests+stk+unit_testing \
   ^trilinos~mumps cuda_arch=${CUDA_ARCH}
