@@ -16,3 +16,6 @@
 [submodule "plato-integration-tests"]
 	path = plato-integration-tests
 	url = ../plato-integration-tests
+[submodule "plato-python-app"]
+	path = plato-python-app
+	url = ../plato-python-app.git
