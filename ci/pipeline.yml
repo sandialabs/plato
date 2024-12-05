@@ -42,6 +42,8 @@ build-platoanalyze:
   tags:
     - ${SYSTEM}
     - ${EXECUTOR}
+  variables:
+    BUILD_TYPE: platoanalyze
   needs: ["build-platoengine"]
 
 unittest-platoengine:
