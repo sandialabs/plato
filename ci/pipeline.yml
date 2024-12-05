@@ -38,7 +38,7 @@ build-platoengine:
 
 build-platoanalyze:
   stage: build
-  extends: .build-and-cache-analyze
+  extends: .build-and-cache-app
   tags:
     - ${SYSTEM}
     - ${EXECUTOR}
