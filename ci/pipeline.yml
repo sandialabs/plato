@@ -36,14 +36,14 @@ build-platoengine:
     - ${EXECUTOR}
   needs: ["build-dependencies"]
 
-build-platoanalyze:
+build-app:
   stage: build
   extends: .build-and-cache-app
   tags:
     - ${SYSTEM}
     - ${EXECUTOR}
   variables:
-    BUILD_TYPE: platoanalyze
+    BUILD_TYPE: ${APPLICATION}
   needs: ["build-platoengine"]
 
 unittest-platoengine:

@@ -35,9 +35,10 @@ trigger-cpu:
   stage: plato-build-test
   extends: .trigger-pipeline
   variables:
-    CONFIGURATION: "cpu-python-app"
+    CONFIGURATION: "cpu"
     SYSTEM: "gremlin"
     EXECUTOR: "shell"
+    APPLICATION: "platoanalyze"
 
 # trigger-cpu-debug:
 #   stage: plato-build-test
