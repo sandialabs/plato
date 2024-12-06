@@ -36,74 +36,80 @@ trigger-cpu:
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "cpu"
+    APPLICATION: "platoanalyze"
     SYSTEM: "gremlin"
     EXECUTOR: "shell"
+
+trigger-cpu-debug:
+  stage: plato-build-test
+  extends: .trigger-pipeline
+  variables:
+    CONFIGURATION: "cpu-debug"
     APPLICATION: "platoanalyze"
+    SYSTEM: "gremlin"
+    EXECUTOR: "shell"
+    RUN_COVERAGE_UNIT_TESTS: "true"
+    SKIP_APP_REGRESSION_TESTS: "true"
+    SKIP_PE_REGRESSION_TESTS: "true"
 
-# trigger-cpu-debug:
-#   stage: plato-build-test
-#   extends: .trigger-pipeline
-#   variables:
-#     CONFIGURATION: "cpu-debug"
-#     SYSTEM: "gremlin"
-#     EXECUTOR: "shell"
-#     RUN_COVERAGE_UNIT_TESTS: "true"
-#     SKIP_APP_REGRESSION_TESTS: "true"
-#     SKIP_PE_REGRESSION_TESTS: "true"
+trigger-cpu-clang:
+  stage: plato-build-test
+  extends: .trigger-pipeline
+  variables:
+    CONFIGURATION: "cpu-clang-dev"
+    APPLICATION: "platoanalyze"
+    SYSTEM: "gremlin"
+    EXECUTOR: "shell"
+    SKIP_APP_REGRESSION_TESTS: "true"
+    SKIP_PE_REGRESSION_TESTS: "true"
 
-# trigger-cpu-clang:
-#   stage: plato-build-test
-#   extends: .trigger-pipeline
-#   variables:
-#     CONFIGURATION: "cpu-clang-dev"
-#     SYSTEM: "gremlin"
-#     EXECUTOR: "shell"
-#     SKIP_APP_REGRESSION_TESTS: "true"
-#     SKIP_PE_REGRESSION_TESTS: "true"
+trigger-quality-check:
+  stage: plato-build-test
+  extends: .trigger-quality-check-pipeline
+  variables:
+    SYSTEM: "gremlin"
+    EXECUTOR: "shell"
 
-# trigger-quality-check:
-#   stage: plato-build-test
-#   extends: .trigger-quality-check-pipeline
-#   variables:
-#     SYSTEM: "gremlin"
-#     EXECUTOR: "shell"
+trigger-gpu:
+  stage: plato-build-test
+  extends: .trigger-pipeline
+  variables:
+    CONFIGURATION: "gpu"
+    APPLICATION: "platoanalyze"
+    SYSTEM: "lumbergh"
+    EXECUTOR: "shell"
 
-# trigger-gpu:
-#   stage: plato-build-test
-#   extends: .trigger-pipeline
-#   variables:
-#     CONFIGURATION: "gpu"
-#     SYSTEM: "lumbergh"
-#     EXECUTOR: "shell"
+trigger-dakota:
+  stage: plato-build-test
+  extends: .trigger-pipeline
+  variables:
+    CONFIGURATION: "dakota"
+    APPLICATION: "platoanalyze"
+    SYSTEM: "lumbergh"
+    EXECUTOR: "shell"
+    CTEST_INCLUDE_REGEX: "dakota"
+    SKIP_APP_UNIT_TESTS: "true"
 
-# trigger-dakota:
-#   stage: plato-build-test
-#   extends: .trigger-pipeline
-#   variables:
-#     CONFIGURATION: "dakota"
-#     SYSTEM: "lumbergh"
-#     EXECUTOR: "shell"
-#     CTEST_INCLUDE_REGEX: "dakota"
-#     SKIP_APP_UNIT_TESTS: "true"
+trigger-optimism:
+  stage: plato-build-test
+  extends: .trigger-pipeline
+  variables:
+    CONFIGURATION: "optimism"
+    APPLICATION: "platopythonapp"
+    SYSTEM: "gremlin"
+    EXECUTOR: "shell"
+    SKIP_PE_UNIT_TESTS: "true"
+    SKIP_PE_REGRESSION_TESTS: "true"
 
-# trigger-optimism:
-#   stage: plato-build-test
-#   extends: .trigger-pipeline
-#   variables:
-#     CONFIGURATION: "optimism"
-#     SYSTEM: "gremlin"
-#     EXECUTOR: "shell"
-#     SKIP_PE_UNIT_TESTS: "true"
-#     SKIP_PE_REGRESSION_TESTS: "true"
-
-# trigger-cpu-snopt:
-#   stage: plato-build-test
-#   extends: .trigger-pipeline
-#   variables:
-#     CONFIGURATION: "cpu-snopt"
-#     SYSTEM: "gremlin"
-#     EXECUTOR: "shell"
-#     SKIP_APP_REGRESSION_TESTS: "true"
-#     SKIP_PE_REGRESSION_TESTS: "true"
-#     SKIP_APP_UNIT_TESTS: "true"
+trigger-cpu-snopt:
+  stage: plato-build-test
+  extends: .trigger-pipeline
+  variables:
+    CONFIGURATION: "cpu-snopt"
+    APPLICATION: "platoanalyze"
+    SYSTEM: "gremlin"
+    EXECUTOR: "shell"
+    SKIP_APP_REGRESSION_TESTS: "true"
+    SKIP_PE_REGRESSION_TESTS: "true"
+    SKIP_APP_UNIT_TESTS: "true"
 
