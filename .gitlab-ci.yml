@@ -48,7 +48,7 @@ trigger-cpu:
 #     SYSTEM: "gremlin"
 #     EXECUTOR: "shell"
 #     RUN_COVERAGE_UNIT_TESTS: "true"
-#     SKIP_PA_REGRESSION_TESTS: "true"
+#     SKIP_APP_REGRESSION_TESTS: "true"
 #     SKIP_PE_REGRESSION_TESTS: "true"
 
 # trigger-cpu-clang:
@@ -58,7 +58,7 @@ trigger-cpu:
 #     CONFIGURATION: "cpu-clang-dev"
 #     SYSTEM: "gremlin"
 #     EXECUTOR: "shell"
-#     SKIP_PA_REGRESSION_TESTS: "true"
+#     SKIP_APP_REGRESSION_TESTS: "true"
 #     SKIP_PE_REGRESSION_TESTS: "true"
 
 # trigger-quality-check:
@@ -84,7 +84,7 @@ trigger-cpu:
 #     SYSTEM: "lumbergh"
 #     EXECUTOR: "shell"
 #     CTEST_INCLUDE_REGEX: "dakota"
-#     SKIP_PA_UNIT_TESTS: "true"
+#     SKIP_APP_UNIT_TESTS: "true"
 
 # trigger-optimism:
 #   stage: plato-build-test
@@ -94,9 +94,7 @@ trigger-cpu:
 #     SYSTEM: "gremlin"
 #     EXECUTOR: "shell"
 #     SKIP_PE_UNIT_TESTS: "true"
-#     SKIP_PA_UNIT_TESTS: "true"
-#     SKIP_PA_REGRESSION_TESTS: "true"
-#     CTEST_INCLUDE_REGEX: "optimism"
+#     SKIP_PE_REGRESSION_TESTS: "true"
 
 # trigger-cpu-snopt:
 #   stage: plato-build-test
@@ -105,7 +103,7 @@ trigger-cpu:
 #     CONFIGURATION: "cpu-snopt"
 #     SYSTEM: "gremlin"
 #     EXECUTOR: "shell"
-#     SKIP_PA_REGRESSION_TESTS: "true"
+#     SKIP_APP_REGRESSION_TESTS: "true"
 #     SKIP_PE_REGRESSION_TESTS: "true"
-#     SKIP_PA_UNIT_TESTS: "true"
+#     SKIP_APP_UNIT_TESTS: "true"
 

@@ -70,20 +70,24 @@ test-platoengine:
     - ${EXECUTOR}
   needs: ["build-platoengine"]
 
-unittest-platoanalyze:
+unittest-app:
   stage: test
-  extends: .unittest-platoanalyze
+  extends: .unittest-app
   tags:
     - ${SYSTEM}
     - ${EXECUTOR}
+  variables:
+    BUILD_TYPE: ${APPLICATION}
   needs: ["build-app"]
 
-test-platoanalyze:
+test-app:
   stage: test
-  extends: .test-platoanalyze
+  extends: .test-app
   tags:
     - ${SYSTEM}
     - ${EXECUTOR}
+  variables:
+    BUILD_TYPE: ${APPLICATION}
   needs: ["build-app"]
 
 test-platoanalyze-timing:
@@ -92,6 +96,8 @@ test-platoanalyze-timing:
   tags:
     - ${SYSTEM}
     - ${EXECUTOR}
+  variables:
+    BUILD_TYPE: platoanalyze
   needs: ["build-app"]
 
 teardown:
@@ -103,11 +109,11 @@ teardown:
   needs:
     - job: "unittest-platoengine"
       optional: true
-    - job: "unittest-platoanalyze"
+    - job: "unittest-app"
       optional: true
     - job: "test-platoengine"
       optional: true
-    - job: "test-platoanalyze"
+    - job: "test-app"
       optional: true
     - job: "test-platoanalyze-timing"
       optional: true
