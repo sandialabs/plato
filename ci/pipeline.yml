@@ -76,7 +76,7 @@ unittest-platoanalyze:
   tags:
     - ${SYSTEM}
     - ${EXECUTOR}
-  needs: ["build-platoanalyze"]
+  needs: ["build-app"]
 
 test-platoanalyze:
   stage: test
@@ -84,7 +84,7 @@ test-platoanalyze:
   tags:
     - ${SYSTEM}
     - ${EXECUTOR}
-  needs: ["build-platoanalyze"]
+  needs: ["build-app"]
 
 test-platoanalyze-timing:
   stage: test
@@ -92,7 +92,7 @@ test-platoanalyze-timing:
   tags:
     - ${SYSTEM}
     - ${EXECUTOR}
-  needs: ["build-platoanalyze"]
+  needs: ["build-app"]
 
 teardown:
   stage: teardown
