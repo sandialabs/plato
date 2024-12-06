@@ -2,5 +2,5 @@
 spack add platoanalyze@develop%clang~amgx~cuda+tacho+enginemesh+esp+mpmd+python build_type=RelWithDebInfo ${SYSTEM_ARCH} \
   ^trilinos~mumps \
   ^openmpi@4.1.3 \
-  ^platoengine@develop%clang+esp+expy+iso+platoproxy+prune~python_app+stk+unit_testing build_type=RelWithDebInfo
+  ^platoengine@develop%clang+esp+expy+iso+platoproxy+prune+stk+unit_testing build_type=RelWithDebInfo
 
