@@ -46,15 +46,15 @@ include:
   variables:
     PLATO_NAME: platoengine
 
-.unittest-platoanalyze:
+.unittest-app:
   extends: .unittest-plato
   variables:
-    PLATO_NAME: platoanalyze
+    PLATO_NAME: ${APPLICATION}
 
 # Template for running platoengine or platoanalyze regression/integration tests.
 # This does not run for the cpu-debug configuration.
 # Expected variables:
-#  PLATO_NAME: Either platoengine or platoanalyze
+#  PLATO_NAME: Either platoengine or APPLICATION
 .test-plato:
   timeout: 6 hours
   variables:
@@ -116,10 +116,10 @@ include:
   variables:
     PLATO_NAME: platoengine
 
-.test-platoanalyze:
+.test-app:
   extends: .test-plato
   variables:
-    PLATO_NAME: platoanalyze
+    PLATO_NAME: ${APPLICATION}
 
 .test-platoanalyze-timing:
   extends: .test-plato
