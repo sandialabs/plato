@@ -7,3 +7,4 @@ variables:
   KCOV_DIR: /home/gitlab-runner/kcov
   CUBIT_DIR: /opt/cubit/16.02
   CPD_DIR: /home/gitlab-runner/pmd-bin-7.0.0-rc4/bin
+  DEFAULT_SETUP_SCRIPT: utilities/setup-env.sh

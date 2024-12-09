@@ -100,6 +100,7 @@ trigger-optimism:
     EXECUTOR: "shell"
     SKIP_PE_UNIT_TESTS: "true"
     SKIP_PE_REGRESSION_TESTS: "true"
+    CUSTOM_SETUP_SCRIPT: "plato-python-app/utilities/setup-env.sh"
 
 # trigger-cpu-snopt:
 #   stage: plato-build-test

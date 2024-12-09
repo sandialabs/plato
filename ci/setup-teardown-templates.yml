@@ -16,6 +16,13 @@ include:
 # Creates a new spack environment for CONFIGURATION.
 # CONFIGURATION must match a supported spec file in utilities/spack.
 .setup-local-spack-installation:
+  rules:
+    - if: $CUSTOM_SETUP_SCRIPT != null
+      variables:
+        SETUP_SCRIPT: $CUSTOM_SETUP_SCRIPT
+    - if: $CUSTOM_SETUP_SCRIPT == null
+      variables:
+        SETUP_SCRIPT: $DEFAULT_SETUP_SCRIPT
   before_script:
     - source utilities/system-env/${SYSTEM}.sh
     - echo "Setting up spack"
@@ -24,7 +31,7 @@ include:
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
     - git submodule foreach git branch # Show branch in output
   script:
-    - source utilities/setup-env.sh -c ${CONFIGURATION} -g ${GPU_ARCHITECTURE}
+    - source ${SETUP_SCRIPT} -c ${CONFIGURATION} -g ${GPU_ARCHITECTURE}
     - source utilities/compilers/${SYSTEM}.sh # System-specific compiler set up
     - spack clean -m
   artifacts:
