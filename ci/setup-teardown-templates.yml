@@ -28,6 +28,7 @@ include:
     - echo "Setting up spack"
     - echo "Trigger branch is ${TRIGGER_BRANCH}"
     - echo "Trigger source is ${TRIGGER_SOURCE}"
+    - echo "Setup Script is ${SETUP_SCRIPT}"
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
     - git submodule foreach git branch # Show branch in output
   script:
