@@ -8,7 +8,15 @@ then
   spack env activate .
   spack load cmake
   spack load platoengine
-  spack load platoanalyze
+
+  if [[ "$#" -eq 1 ]]
+  then
+    APP_NAME=$1
+  else
+    APP_NAME="platoanalyze"
+  fi
+  spack load ${APP_NAME}
+
   source utilities/sanitizer-env.sh ${SUPER_PLATO_ROOT}/ci/detail/sanitizer_black_list.txt
   source utilities/setup-ccache-on-ceelan.sh
 else
