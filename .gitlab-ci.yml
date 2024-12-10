@@ -95,7 +95,7 @@ trigger-optimism:
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "optimism"
-    APPLICATION: "platopythonapp"
+    APPLICATION: "plato-python-app"
     SYSTEM: "gremlin"
     EXECUTOR: "shell"
     SKIP_PE_UNIT_TESTS: "true"
