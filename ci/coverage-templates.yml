@@ -18,7 +18,7 @@ include:
     - echo "Unit testing for coverage platoengine for branch ${TRIGGER_BRANCH} from source ${TRIGGER_SOURCE}"
     - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
-    - source utilities/test-env.sh
+    - source utilities/test-env.sh ${APPLICATION}
   script:
     - PLATOENGINE_DIR=$(spack location -i platoengine)
     - UNIT_TESTERS=$(find "$PLATOENGINE_DIR"/bin -name "*UnitTest*" -printf "%f ")

@@ -6,4 +6,4 @@ spack add platoanalyze@develop+all_penalty+amgx+cuda+enginemesh+esp+hex_elements
   ^amgx cuda_arch=${CUDA_ARCH} \
   ^openmpi@4.1.3 \
   ^platoengine@develop+cuda+esp+expy+iso+platoproxy+prune+regression+services+sierra_tests+stk+unit_testing \
-  ^trilinos~mumps cuda_arch=${CUDA_ARCH}
+  ^trilinos cuda_arch=${CUDA_ARCH}

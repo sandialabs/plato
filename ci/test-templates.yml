@@ -5,7 +5,7 @@ include:
   rules:
     - if: $SKIP_PE_UNIT_TESTS == "true" && $PLATO_NAME == "platoengine"
       when: never
-    - if: $SKIP_PA_UNIT_TESTS == "true" && $PLATO_NAME == "platoanalyze"
+    - if: $SKIP_APP_UNIT_TESTS == "true" && $PLATO_NAME == $BUILD_TYPE
       when: never
     - when: on_success
   variables:
@@ -16,7 +16,7 @@ include:
     - echo "Unit testing ${PLATO_NAME} for branch ${TRIGGER_BRANCH}"
     - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
-    - source utilities/test-env.sh
+    - source utilities/test-env.sh ${APPLICATION}
     - source utilities/sanitizer-env.sh ${CI_PROJECT_DIR}/${LSAN_BLACKLIST_FILE}
   script: 
     - BUILD_DIR=$(spack location -b ${PLATO_NAME})
@@ -46,15 +46,15 @@ include:
   variables:
     PLATO_NAME: platoengine
 
-.unittest-platoanalyze:
+.unittest-app:
   extends: .unittest-plato
   variables:
-    PLATO_NAME: platoanalyze
+    PLATO_NAME: ${APPLICATION}
 
 # Template for running platoengine or platoanalyze regression/integration tests.
 # This does not run for the cpu-debug configuration.
 # Expected variables:
-#  PLATO_NAME: Either platoengine or platoanalyze
+#  PLATO_NAME: Either platoengine or APPLICATION
 .test-plato:
   timeout: 6 hours
   variables:
@@ -69,7 +69,7 @@ include:
   rules:
     - if: $SKIP_PE_REGRESSION_TESTS == "true" && $PLATO_NAME == "platoengine"
       when: never
-    - if: $SKIP_PA_REGRESSION_TESTS == "true" && $PLATO_NAME == "platoanalyze"
+    - if: $SKIP_APP_REGRESSION_TESTS == "true" && $PLATO_NAME == $BUILD_TYPE
       when: never
     - if: $CONFIGURATION == "gpu"
       variables:
@@ -83,7 +83,7 @@ include:
     - export PA_TIMING_SCALE=${PA_TIMING_SCALE}
     - export PATH=${CUBIT_DIR}:$PATH
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
-    - source utilities/test-env.sh || true
+    - source utilities/test-env.sh ${APPLICATION} || true
   script:
     - BUILD_DIR=$(spack location -b ${PLATO_NAME})
     - cd ${BUILD_DIR}
@@ -116,10 +116,10 @@ include:
   variables:
     PLATO_NAME: platoengine
 
-.test-platoanalyze:
+.test-app:
   extends: .test-plato
   variables:
-    PLATO_NAME: platoanalyze
+    PLATO_NAME: ${APPLICATION}
 
 .test-platoanalyze-timing:
   extends: .test-plato

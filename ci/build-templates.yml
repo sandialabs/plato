@@ -63,17 +63,16 @@ include:
       untracked: true # For spack env files
       policy: pull-push
 
-.build-and-cache-analyze:
+.build-and-cache-app:
   timeout: 4 hours
   extends: .build-and-cache
   variables:
-    BUILD_TYPE: platoanalyze
     SPACK_INSTALL_ARGS: ""
   cache:
     - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
         - platoengine/spack-*
-        - platoanalyze/spack-*
+        - ${BUILD_TYPE}/spack-*
         - spack/opt
       untracked: true # For spack env files
       policy: pull-push

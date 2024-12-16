@@ -1,7 +1,4 @@
 #!/bin/bash
 
-spack add platoanalyze@develop+tacho~amgx~cuda+enginemesh+esp+mpmd+python~verificationtests ${SYSTEM_ARCH} \
-  ^platoengine@develop+esp+expy~iso~platoproxy~prune+regression~sierra_tests~stk~unit_testing+services+python_app+optimism \
-  ^openmpi@4.1.3 \
-  ^trilinos~mumps %gcc@11.3.0
-
+# platoanalyze spec is removed and plato-python-app spec is added later 
+spack add platoanalyze@develop
