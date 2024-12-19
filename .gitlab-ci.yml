@@ -7,10 +7,13 @@ variables:
   CACHE_COMPRESSION_LEVEL: fastest
   CLEAN_CACHE: "true"
 
+.pipeline-rules: &pipeline-rules
+  - if: $CI_PIPELINE_SOURCE == "web" && $REPO_PIPELINES == null
+  - if: $CI_PIPELINE_SOURCE == "pipeline" && $REPO_PIPELINES == null
+
 .trigger-pipeline:
   rules:
-    - if: $CI_PIPELINE_SOURCE == "pipeline"
-    - if: $CI_PIPELINE_SOURCE == "web"
+    - *pipeline-rules
   variables:
     TRIGGER_BRANCH: ${PARENT_BRANCH}
     TRIGGER_SOURCE: ${PARENT_SOURCE}
@@ -93,6 +96,10 @@ trigger-dakota:
 trigger-optimism:
   stage: plato-build-test
   extends: .trigger-pipeline
+  rules:
+    - *pipeline-rules
+    - if: $CI_PIPELINE_SOURCE == "web" && $REPO_PIPELINES == "plato-python-app"
+    - if: $CI_PIPELINE_SOURCE == "pipeline" && $REPO_PIPELINES == "plato-python-app"
   variables:
     CONFIGURATION: "optimism"
     APPLICATION: "plato-python-app"
@@ -113,4 +120,3 @@ trigger-cpu-snopt:
     SKIP_APP_REGRESSION_TESTS: "true"
     SKIP_PE_REGRESSION_TESTS: "true"
     SKIP_APP_UNIT_TESTS: "true"
-
