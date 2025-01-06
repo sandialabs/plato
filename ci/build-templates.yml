@@ -54,6 +54,7 @@ include:
       when: always
     - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
+        - platoengine/spack-*
         - spack/opt
       untracked: true # For spack env files
       policy: push
@@ -66,6 +67,7 @@ include:
   cache:
     - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
+        - platoengine/spack-*
         - spack/opt
       untracked: true # For spack env files
       policy: pull-push
@@ -78,6 +80,8 @@ include:
   cache:
     - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
+        - platoengine/spack-*
+        - ${BUILD_TYPE}/spack-*
         - spack/opt
       untracked: true # For spack env files
       policy: pull-push
