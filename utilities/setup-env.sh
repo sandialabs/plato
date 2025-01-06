@@ -16,8 +16,8 @@ then
   # Set up spack.yaml for configuration
   source ./utilities/spack/spack-${CONFIGURATION}.sh
 
-  spack develop -p ${SUPER_DIR}/platoengine platoengine@develop
-  spack develop -p ${SUPER_DIR}/platoanalyze platoanalyze@develop
+  spack develop -p ${SUPER_DIR}/platoengine -b ${SUPER_DIR}/platoengine platoengine@develop
+  spack develop -p ${SUPER_DIR}/platoanalyze -b ${SUPER_DIR}/platoanalyze platoanalyze@develop
   spack mirror add ci-mirror ${SUPER_DIR}/plato-prebuilt-binaries/ci-dependency-mirror
 
   git config --file .git/modules/platoengine/config core.hooksPath ${SUPER_DIR}/utilities/git-hooks
