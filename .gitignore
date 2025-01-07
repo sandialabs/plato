@@ -1,3 +1,4 @@
 spack.yaml
 spack.lock
 .spack-env
+build/
