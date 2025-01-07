@@ -23,11 +23,9 @@ include:
     - |
       if [[ "$BUILD_TYPE" == "dependencies" ]]
       then
-        PE_LOCATION=$(spack location -s platoengine)
-        mkdir "$BUILD_TYPE" && cp ${PE_LOCATION}/spack-build-out.txt "$BUILD_TYPE"
+        mkdir "$BUILD_TYPE" && cp platoengine/build-*/spack-build-out.txt "$BUILD_TYPE"
       else
-        BUILD_LOCATION=$(spack location -s ${BUILD_TYPE})
-        cp ${BUILD_LOCATION}/spack-build-out.txt "$BUILD_TYPE"
+        cp ${BUILD_TYPE}/build-*/spack-build-out.txt "$BUILD_TYPE"
       fi
 # Uninstall PE for the dependencies build so it doesn't get copied to the spack/opt/spack cache.
     - |
@@ -54,7 +52,7 @@ include:
       when: always
     - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
-        - build/platoengine/spack-*
+        - build/platoengine
         - spack/opt
       untracked: true # For spack env files
       policy: push
@@ -67,7 +65,7 @@ include:
   cache:
     - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
-        - build/platoengine/spack-*
+        - build/platoengine
         - spack/opt
       untracked: true # For spack env files
       policy: pull-push
@@ -80,8 +78,8 @@ include:
   cache:
     - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
-        - build/platoengine/spack-*
-        - build/${BUILD_TYPE}/spack-*
+        - build/platoengine
+        - build/${BUILD_TYPE}
         - spack/opt
       untracked: true # For spack env files
       policy: pull-push
