@@ -20,13 +20,25 @@ setup-spack:
   - job: "merge-develop"
     optional: true
 
+build-kcov:
+  stage: build
+  extends: .install-kcov
+  tags:
+    - ${SYSTEM}
+    - ${EXECUTOR}
+  needs: ["setup-spack"]
+
 build-dependencies:
   stage: build
   extends: .build-and-cache-dependencies
   tags:
     - ${SYSTEM}
     - ${EXECUTOR}
-  needs: ["setup-spack"]
+  needs:
+    - job: "setup-spack"
+      optional: false
+    - job: "build-kcov"
+      optional: true
 
 build-platoengine:
   stage: build
