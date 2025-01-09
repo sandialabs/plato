@@ -31,4 +31,4 @@ leak:*libhwloc.so*
 leak:*libpmix.so*
 leak:*libmpi.so*
 leak:*libc.so*
-leak:*unknown module*
+leak:<unknown module>
