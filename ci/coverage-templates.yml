@@ -10,6 +10,7 @@ include:
     - source utilities/system-env/${SYSTEM}.sh
     - echo "Installing kcov"
   script:
+    - source utilities/build-env.sh
     - ./utilities/setup-kcov.sh
   cache:
     - key: ${SPACK_DEPENDENCY_KEY}_${CONFIGURATION}
