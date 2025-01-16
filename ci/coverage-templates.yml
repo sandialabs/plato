@@ -18,6 +18,12 @@ include:
         - spack/opt
       policy: pull-push
       when: always
+  artifacts:
+    when: always
+    paths:
+      - spack.yaml
+      - spack.lock
+      - .spack-env/
 
 # Template for running platoengine unit test executables with kcov for coverage reporting. 
 .unittest-coverage-platoengine:
