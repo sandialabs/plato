@@ -11,19 +11,14 @@ include:
     - echo "Installing kcov"
   script:
     - source utilities/build-env.sh
-    - ./utilities/setup-kcov.sh
+    - spack concretize -f
+    - spack install kcov
   cache:
     - key: ${SPACK_DEPENDENCY_KEY}_${CONFIGURATION}
       paths: 
         - spack/opt
       policy: pull-push
       when: always
-  artifacts:
-    when: always
-    paths:
-      - spack.yaml
-      - spack.lock
-      - .spack-env/
 
 # Template for running platoengine unit test executables with kcov for coverage reporting. 
 .unittest-coverage-platoengine:

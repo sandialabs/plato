@@ -1,5 +1,7 @@
 #!/bin/bash
 
-spack add kcov
-spack concretize -f
-spack install kcov
+RUN_COVERAGE="$1"
+if [[ "$RUN_COVERAGE" == "TRUE" ]]; then
+  spack add kcov
+fi
+
