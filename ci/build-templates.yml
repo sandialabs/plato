@@ -15,7 +15,6 @@ include:
     - git submodule foreach git branch # Show branch in output
   script:
     - source utilities/build-env.sh
-    - cat spack.yaml # Debug, remove me
     - spack concretize -f
     - spack install ${SPACK_INSTALL_ARGS}
 # Make sure package was installed, if not there was a build error
