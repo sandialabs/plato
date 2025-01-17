@@ -82,17 +82,6 @@ trigger-gpu:
     SYSTEM: "lumbergh"
     EXECUTOR: "shell"
 
-trigger-dakota:
-  stage: plato-build-test
-  extends: .trigger-pipeline
-  variables:
-    CONFIGURATION: "dakota"
-    APPLICATION: "platoanalyze"
-    SYSTEM: "lumbergh"
-    EXECUTOR: "shell"
-    CTEST_INCLUDE_REGEX: "dakota"
-    SKIP_APP_UNIT_TESTS: "true"
-
 trigger-optimism:
   stage: plato-build-test
   extends: .trigger-pipeline

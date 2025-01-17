@@ -1,6 +1,25 @@
 include:
   local: ci/variables.yml
 
+.install-kcov:
+  rules:
+    - if: $RUN_COVERAGE_UNIT_TESTS == "true"
+      when: on_success
+    - when: never
+  before_script:
+    - source utilities/system-env/${SYSTEM}.sh
+    - echo "Installing kcov"
+  script:
+    - source utilities/build-env.sh
+    - spack concretize -f
+    - spack install kcov
+  cache:
+    - key: ${SPACK_DEPENDENCY_KEY}_${CONFIGURATION}
+      paths: 
+        - spack/opt
+      policy: pull-push
+      when: always
+
 # Template for running platoengine unit test executables with kcov for coverage reporting. 
 .unittest-coverage-platoengine:
   rules:
@@ -19,6 +38,7 @@ include:
     - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
     - source utilities/test-env.sh ${APPLICATION}
+    - spack load kcov
   script:
     - PLATOENGINE_DIR=$(spack location -i platoengine)
     - UNIT_TESTERS=$(find "$PLATOENGINE_DIR"/bin -name "*UnitTest*" -printf "%f ")
@@ -27,10 +47,10 @@ include:
         echo "Running ${TEST} for coverage"
         KCOV_REPORT_DIR_FOR_TEST=${KCOV_REPORT_DIR_BASE}_${TEST}
         mkdir -p ${KCOV_REPORT_DIR_FOR_TEST}
-        ${KCOV_DIR}/./kcov --include-pattern=${KCOV_INCLUDE_PATTERNS} --exclude-pattern=${KCOV_EXCLUDE_PATTERNS} ${KCOV_REPORT_DIR_FOR_TEST} ${TEST}
+        kcov --include-pattern=${KCOV_INCLUDE_PATTERNS} --exclude-pattern=${KCOV_EXCLUDE_PATTERNS} ${KCOV_REPORT_DIR_FOR_TEST} ${TEST}
       done
     - ALL_REPORT_DIRS=$(find ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR} -maxdepth 1 -name "*UnitTest*")
-    - ${KCOV_DIR}/./kcov --include-pattern=${KCOV_INCLUDE_PATTERNS} --merge ${KCOV_REPORT_DIR} ${ALL_REPORT_DIRS}
+    - kcov --include-pattern=${KCOV_INCLUDE_PATTERNS} --merge ${KCOV_REPORT_DIR} ${ALL_REPORT_DIRS}
     - grep -oP 'coverage line-rate="[0-9].[0-9]*"' ${KCOV_REPORT_DIR}/${KCOV_COBERTURA_PATH} | grep -oP '[0-9].[0-9]*' > grepcov.txt
     - perl -e 'printf("%.1f", '`cat grepcov.txt`'*100)' > prcnt
     - echo 'Percentage Covered '`cat prcnt`

@@ -33,6 +33,7 @@ include:
     - git submodule foreach git branch # Show branch in output
   script:
     - source ${SETUP_SCRIPT} -c ${CONFIGURATION} -g ${GPU_ARCHITECTURE}
+    - ./utilities/setup-kcov.sh ${RUN_COVERAGE_UNIT_TESTS}
     - source utilities/compilers/${SYSTEM}.sh # System-specific compiler set up
     - spack clean -m
   artifacts:

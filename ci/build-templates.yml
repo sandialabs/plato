@@ -19,11 +19,18 @@ include:
     - spack install ${SPACK_INSTALL_ARGS}
 # Make sure package was installed, if not there was a build error
     - if [[ "$BUILD_TYPE" != "dependencies" ]]; then spack find "${BUILD_TYPE}"; fi
-# Uninstall PE so it doesn't get copied to the spack/opt/spack cache.
+# Copy the build log to upload as an artifact
     - |
       if [[ "$BUILD_TYPE" == "dependencies" ]]
-      then 
-        mkdir "$BUILD_TYPE" && cp platoengine/spack-build-out.txt "$BUILD_TYPE"
+      then
+        mkdir "$BUILD_TYPE" && cp platoengine/build-*/spack-build-out.txt "$BUILD_TYPE"
+      else
+        cp ${BUILD_TYPE}/build-*/spack-build-out.txt "$BUILD_TYPE"
+      fi
+# Uninstall PE for the dependencies build so it doesn't get copied to the spack/opt/spack cache.
+    - |
+      if [[ "$BUILD_TYPE" == "dependencies" ]]
+      then
         spack uninstall -ayfR platoengine
       fi
   artifacts:
@@ -45,7 +52,7 @@ include:
       when: always
     - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
-        - platoengine/spack-*
+        - build/platoengine
         - spack/opt
       untracked: true # For spack env files
       policy: push
@@ -58,7 +65,7 @@ include:
   cache:
     - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
-        - platoengine/spack-*
+        - build/platoengine
         - spack/opt
       untracked: true # For spack env files
       policy: pull-push
@@ -71,8 +78,8 @@ include:
   cache:
     - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
-        - platoengine/spack-*
-        - ${BUILD_TYPE}/spack-*
+        - build/platoengine
+        - build/${BUILD_TYPE}
         - spack/opt
       untracked: true # For spack env files
       policy: pull-push
