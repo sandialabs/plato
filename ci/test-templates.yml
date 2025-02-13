@@ -121,18 +121,5 @@ include:
   variables:
     PLATO_NAME: ${APPLICATION}
 
-.test-platoanalyze-timing:
-  extends: .test-plato
-  allow_failure: true
-  variables:
-    PLATO_NAME: platoanalyze
-  rules:
-    - if: $CONFIGURATION == "gpu"
-      variables:
-        CTEST_EXCLUDE_REGEX: "UnitTest"
-        CTEST_INCLUDE_REGEX: "timing"
-        CTEST_LABEL_EXCLUDE: ""
-        CTEST_NUM_JOBS: "1"
-      when: on_success
-    - when: never
+
  

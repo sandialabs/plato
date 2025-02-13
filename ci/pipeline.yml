@@ -102,16 +102,6 @@ test-app:
     BUILD_TYPE: ${APPLICATION}
   needs: ["build-app"]
 
-test-platoanalyze-timing:
-  stage: test
-  extends: .test-platoanalyze-timing
-  tags:
-    - ${SYSTEM}
-    - ${EXECUTOR}
-  variables:
-    BUILD_TYPE: platoanalyze
-  needs: ["build-app"]
-
 teardown:
   stage: teardown
   extends: .clean-build-caches
