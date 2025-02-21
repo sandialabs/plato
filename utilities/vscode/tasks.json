@@ -13,7 +13,7 @@
             }
         },
         {
-            "label": "platoengine buildenv",
+            "label": "platoengine-buildenv",
             "type": "shell",
             "command": "source utilities/build-env.sh && spack build-env platoengine -- bash",
             "group": {
