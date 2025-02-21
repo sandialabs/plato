@@ -13,6 +13,8 @@ then
     echo "Available installations are:"
     ls /projects/plato/automated-builds/ | grep -v spack-mirror
   fi
+  mkdir -p .vscode
+  cp utilities/vscode/tasks.json .vscode
 else
   echo "Can't find utilities directory. This script must be run from the plato super project directory."
 fi
