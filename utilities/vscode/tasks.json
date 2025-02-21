@@ -1,0 +1,42 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "spack-install",
+            "type": "shell",
+            "command": "source utilities/build-env.sh && spack install",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "platoengine-buildenv",
+            "type": "shell",
+            "command": "source utilities/build-env.sh && spack build-env platoengine -- bash",
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "unit-test-functional",
+            "type": "shell",
+            "command": "source utilities/test-env.sh && pushd build/platoengine/functional/plato && ctest",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        }
+    ]
+}
