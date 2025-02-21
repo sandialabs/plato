@@ -13,6 +13,23 @@
             }
         },
         {
+            "label": "platoengine buildenv",
+            "type": "shell",
+            "command": "source utilities/build-env.sh && spack build-env platoengine -- bash",
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
             "label": "unit-test-functional",
             "type": "shell",
             "command": "source utilities/test-env.sh && pushd build/platoengine/functional/plato && ctest",
@@ -21,6 +38,5 @@
                 "isDefault": true
             }
         }
-
     ]
 }
