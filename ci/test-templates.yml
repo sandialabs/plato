@@ -1,7 +1,8 @@
 include: 
-  local: ci/variables.yml
+  local: ci/base.yml
 
 .unittest-plato:
+  extends: .base-job
   rules:
     - if: $SKIP_PE_UNIT_TESTS == "true" && $PLATO_NAME == "platoengine"
       when: never
@@ -16,7 +17,7 @@ include:
     - echo "Unit testing ${PLATO_NAME} for branch ${TRIGGER_BRANCH}"
     - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
-    - source utilities/test-env.sh ${APPLICATION}
+    - source utilities/test-env.sh ${APPLICATION} || true
     - source utilities/sanitizer-env.sh ${CI_PROJECT_DIR}/${LSAN_BLACKLIST_FILE}
   script: 
     - BUILD_DIR=$(spack location -b ${PLATO_NAME})
@@ -56,6 +57,7 @@ include:
 # Expected variables:
 #  PLATO_NAME: Either platoengine or APPLICATION
 .test-plato:
+  extends: .base-job
   timeout: 6 hours
   variables:
     GTEST_REPORT_NAME: "${PLATO_NAME}-tests.xml"
@@ -74,7 +76,7 @@ include:
     - if: $CONFIGURATION == "gpu"
       variables:
         CTEST_LABEL_EXCLUDE: ""
-        CTEST_NUM_JOBS: "1"
+        CTEST_NUM_JOBS: "2"
     - when: on_success
   before_script:
     - source utilities/system-env/${SYSTEM}.sh

@@ -7,3 +7,14 @@ variables:
   CUBIT_DIR: /opt/cubit/16.02
   CPD_DIR: /home/gitlab-runner/pmd-bin-7.0.0-rc4/bin
   DEFAULT_SETUP_SCRIPT: utilities/setup-env.sh
+
+.base-job:
+  hooks:
+    pre_get_sources_script:
+      - |
+        if [[ $(which module) ]]; then
+          module purge
+          module load aue/git/2.42.0
+          module load aue/git-lfs/3.3.0
+          module load ccache
+        fi
