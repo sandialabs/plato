@@ -79,8 +79,9 @@ trigger-gpu:
   variables:
     CONFIGURATION: "gpu"
     APPLICATION: "platoanalyze"
-    SYSTEM: "lumbergh"
+    SYSTEM: "ascicgpu22"
     EXECUTOR: "shell"
+    CUSTOM_CI_BUILDS_DIR: "/scratch/plato-ci"
 
 trigger-optimism:
   stage: plato-build-test

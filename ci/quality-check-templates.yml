@@ -1,7 +1,8 @@
 include:
-  local: ci/variables.yml
+  local: ci/base.yml
 
 .run-copy-paste-check:
+  extends: .base-job
   before_script:
     - source utilities/system-env/${SYSTEM}.sh
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}

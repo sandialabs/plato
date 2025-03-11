@@ -1,7 +1,8 @@
 include:
-  local: ci/variables.yml
+  local: ci/base.yml
 
 .install-kcov:
+  extends: .base-job
   rules:
     - if: $RUN_COVERAGE_UNIT_TESTS == "true"
       when: on_success
@@ -22,6 +23,7 @@ include:
 
 # Template for running platoengine unit test executables with kcov for coverage reporting. 
 .unittest-coverage-platoengine:
+  extends: .base-job
   rules:
     - if: $RUN_COVERAGE_UNIT_TESTS == "true"
       when: on_success

@@ -1,10 +1,11 @@
 include: 
-  local: ci/variables.yml
+  local: ci/base.yml
 
 # Merges TRIGGER_BRANCH with develop for merge request pipelines.
 # This has to be repeated in other jobs, but this job exists so that if the merge fails,
 # it's clear that it failed due to merge conflicts.
 .merge-with-develop:
+  extends: .base-job
   rules:
     - if: $TRIGGER_SOURCE == "merge_request_event"
   before_script:
@@ -16,6 +17,7 @@ include:
 # Creates a new spack environment for CONFIGURATION.
 # CONFIGURATION must match a supported spec file in utilities/spack.
 .setup-local-spack-installation:
+  extends: .base-job
   rules:
     - if: $CUSTOM_SETUP_SCRIPT != null
       variables:
@@ -45,6 +47,7 @@ include:
 # Deletes all temporary build caches, i.e. PE and PA build objects.
 # The cache containing all dependencies is persistent.
 .clean-build-caches:
+  extends: .base-job
   when: always
   before_script:
     - source utilities/system-env/${SYSTEM}.sh
