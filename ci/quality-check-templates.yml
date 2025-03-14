@@ -10,3 +10,16 @@ include:
     - echo "Copy paste check running on ${TRIGGER_BRANCH}"
     - source utilities/copy-paste-check.sh ${CPD_DIR} ${COPY_TOKENS}  ${CHECK_DIR} ${EXCLUDE_LIST}
 
+.run-doxygen:
+  extends: .base-job
+  before_script:
+    - source utilities/system-env/${SYSTEM}.sh
+    - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
+  script:
+    - echo "Doxygen running on ${TRIGGER_BRANCH}"
+    - ./utilities/doxygen/generate-doxygen.sh
+  artifacts:
+    when: always
+    paths:
+      - "${CI_PROJECT_DIR}/platoengine-doxygen-output"
+    expire_in: 5 days

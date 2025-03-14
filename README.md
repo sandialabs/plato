@@ -80,3 +80,8 @@ For a merge request, the pipeline will attempt to checkout a branch with the nam
 Note that for open merge requests, any push to the Gitlab server will launch a new pipeline.
 If you don't need a pipeline to run, `[ci skip]` can be appended to commit messages and no new pipelines will be launched.
 These pipelines are considered failing, and so merge requests will still require a subsequent passing pipeline.
+
+## Documentation
+
+Doxygen documentation for platoengine is built weekly and available here: [http://1540-compsim.cee-gitlab.lan/plato/automated-cee-build/](http://1540-compsim.cee-gitlab.lan/plato/automated-cee-build/).
+
