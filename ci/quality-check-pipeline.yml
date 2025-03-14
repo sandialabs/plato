@@ -51,3 +51,14 @@ copy-paste-check-analyze:
   needs:
   - job: "merge-develop"
     optional: true
+
+doxygen-engine:
+  stage: test
+  extends: .run-doxygen
+  tags:
+    - ${SYSTEM}
+    - ${EXECUTOR}
+  needs:
+    - job: "merge-develop"
+      optional: true
+
