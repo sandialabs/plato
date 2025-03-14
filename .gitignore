@@ -3,3 +3,4 @@ spack.lock
 .spack-env
 build/
 .vscode/
+platoengine-doxygen-output/
