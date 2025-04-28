@@ -19,3 +19,6 @@
 [submodule "plato-python-app"]
 	path = plato-python-app
 	url = ../plato-python-app.git
+[submodule "plato-cubit-geometry"]
+	path = plato-cubit-geometry
+	url = ../plato-cubit-geometry.git
