@@ -20,9 +20,9 @@ setup-spack:
   - job: "merge-develop"
     optional: true
 
-build-kcov:
+build-gcovr:
   stage: build
-  extends: .install-kcov
+  extends: .install-gcovr
   tags:
     - ${SYSTEM}
     - ${EXECUTOR}
