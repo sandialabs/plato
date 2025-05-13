@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # gcc
-GCC_MODULE="aue/gcc/11.4.0"
+GCC_MODULE="aue/gcc/12.3.0"
 ./utilities/compilers/add-compiler.sh ${GCC_MODULE} gcc
 ./utilities/compilers/add-module.py gcc ${GCC_MODULE}
 
