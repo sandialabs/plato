@@ -50,7 +50,8 @@ include:
       gcovr -j16 -r ${SOURCE_DIR} --cobertura ${COV_COBERTURA_PATH} \
             --html-details coverage.html --print-summary \
             --exclude-unreachable-branches \
-            --exclude '.*unittest.*' --exclude '.*test_utilities.*' \
+            --exclude '.*unittest.*' \
+            --exclude '.*test_utilities.*' \
             --exclude '.*integration_tests.*'
             ${BUILD_DIR}/functional/plato
   coverage: '/lines: ([0-9]{1,3}.[0-9]%)/'
