@@ -75,7 +75,7 @@ include:
       when: never
     - if: $CONFIGURATION == "gpu"
       variables:
-        CTEST_LABEL_EXCLUDE: ""
+        CTEST_LABEL_EXCLUDE: "CPU_only"
         CTEST_NUM_JOBS: "2"
     - when: on_success
   before_script:
