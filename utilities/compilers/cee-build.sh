@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # gcc
-GCC_MODULE="aue/gcc/11.4.0"
+GCC_MODULE="aue/gcc/12.3.0"
 ./utilities/compilers/add-compiler.sh ${GCC_MODULE} gcc
 ./utilities/compilers/add-module.py gcc ${GCC_MODULE}
 
@@ -18,6 +18,8 @@ CLANG_GFORTRAN_FLAGS="-fPIC"
 ./utilities/compilers/find-external-package-from-module.sh ${CLANG_MODULE} clang llvm
 
 # cuda
-CUDA_MODULE="aue/cuda/11.8.0-gcc-10.3.0"
-./utilities/compilers/find-external-package-from-module.sh ${CUDA_MODULE} nvcc cuda
+CUDA_11_MODULE="aue/cuda/11.8.0-gcc-10.3.0"
+./utilities/compilers/find-external-package-from-module.sh ${CUDA_11_MODULE} nvcc cuda
+CUDA_12_MODULE="aue/cuda/12.4.0-gcc-12.3.0"
+./utilities/compilers/find-external-package-from-module.sh ${CUDA_12_MODULE} nvcc cuda
 
