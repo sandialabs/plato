@@ -2,6 +2,5 @@
 
 RUN_COVERAGE="${1^^}"
 if [[ "$RUN_COVERAGE" == "TRUE" ]]; then
-  spack add kcov
+  spack add py-gcovr
 fi
-
