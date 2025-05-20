@@ -38,7 +38,6 @@ include:
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
     - source utilities/test-env.sh ${APPLICATION}
   script:
-    - spack build-env platoengine -- bash
     - BUILD_DIR=$(spack location -b platoengine)
     - cd ${BUILD_DIR}/functional/plato
     - ctest
@@ -46,13 +45,16 @@ include:
     - SOURCE_DIR=$(spack location -c platoengine)
     - spack load py-gcovr
     - |
-      gcovr -j16 -r ${SOURCE_DIR} --cobertura ${COV_COBERTURA_PATH} \
-            --html-details coverage.html --print-summary \
+      gcovr -j16 --root ${SOURCE_DIR} \
+            --gcov-executable ${GCOV_EXE} \
+            --decisions \
+            --cobertura ${COV_COBERTURA_PATH} \
+            --html-details coverage.html \
+            --print-summary \
             --exclude-unreachable-branches \
             --exclude '.*unittest.*' \
             --exclude '.*test_utilities.*' \
             --exclude '.*integration_tests.*' \
-            --decisions \
             ${BUILD_DIR}/functional/plato
   coverage: '/lines: ([0-9]{1,3}.[0-9]%)/'
   artifacts:
