@@ -24,7 +24,7 @@ then
     REQUIRED_DIRECTORY="functional/plato"
 elif [[ "$REPO_NAME" == "platoanalyze" ]]
 then
-    REQUIRED_DIRECTORY="src/functional"
+    REQUIRED_DIRECTORY="./"
 fi
 FILE_EXTENSION_REGEX=".*\.hpp$\|.*\.cpp$"
 FILES_TO_CHECK=$(git diff --name-only --cached ${REQUIRED_DIRECTORY} | grep ${FILE_EXTENSION_REGEX})
