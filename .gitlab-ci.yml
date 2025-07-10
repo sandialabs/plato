@@ -111,8 +111,6 @@ trigger-plato-cubit:
     APPLICATION: "plato-cubit-geometry"
     SYSTEM: "ascicgpu22"
     EXECUTOR: "shell"
-    SKIP_PE_UNIT_TESTS: "true"
-    SKIP_PE_REGRESSION_TESTS: "true"
     CUSTOM_SETUP_SCRIPT: "plato-cubit-geometry/utilities/setup-env.sh"
     CUSTOM_CI_BUILDS_DIR: "/scratch/plato-ci"
 
