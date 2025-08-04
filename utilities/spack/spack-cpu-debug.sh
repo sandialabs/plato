@@ -2,4 +2,4 @@
 
 spack add platoanalyze@develop~amgx~cuda+tacho+enginemesh build_type=Debug ${SYSTEM_ARCH} \
   ^openmpi@4.1.6 \
-  ^platoengine@develop+esp+expy+iso+platoproxy+prune+stk+unit_testing build_type=Debug
+  ^platoengine@develop+esp+expy+iso+prune+stk+unit_testing build_type=Debug
