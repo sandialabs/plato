@@ -114,7 +114,6 @@ trigger-plato-cubit:
     CUSTOM_SETUP_SCRIPT: "plato-cubit-geometry/utilities/setup-env.sh"
     CUSTOM_CI_BUILDS_DIR: "/scratch/plato-ci"
 
-
 trigger-cpu-snopt:
   stage: plato-build-test
   extends: .trigger-pipeline
