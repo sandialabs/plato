@@ -1,4 +1,4 @@
 #!/bin/bash
-spack add platoanalyze@develop%clang~amgx~cuda+tacho+enginemesh build_type=RelWithDebInfo ${SYSTEM_ARCH} \
-  ^openmpi@4.1.6 \
-  ^platoengine@develop%clang+esp+unit_testing build_type=RelWithDebInfo
+spack add platoanalyze@develop~amgx~cuda+tacho+enginemesh build_type=RelWithDebInfo ${SYSTEM_ARCH} \
+  ^platoengine@develop+esp+unit_testing build_type=RelWithDebInfo \
+  ^openmpi@4.1.6 

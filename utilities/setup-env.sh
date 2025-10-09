@@ -2,6 +2,7 @@
 
 if [[ -d "utilities" ]]
 then
+  source utilities/setup-environment-variables.sh
   source utilities/parse-options.sh
   parse_setup_options "$@"
 
@@ -22,6 +23,9 @@ then
 
   git config --file .git/modules/platoengine/config core.hooksPath ${SUPER_DIR}/utilities/git-hooks
   git config --file .git/modules/platoanalyze/config core.hooksPath ${SUPER_DIR}/utilities/git-hooks
+  
+  source ./utilities/compilers/setup-toolchain.sh ${CONFIGURATION}
+ 
 else
   echo "Can't find utilities directory. This script must be run from the plato super project directory."
 fi

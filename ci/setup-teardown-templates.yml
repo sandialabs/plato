@@ -9,7 +9,7 @@ include:
   rules:
     - if: $TRIGGER_SOURCE == "merge_request_event"
   before_script:
-    - source utilities/system-env/${SYSTEM}.sh
+    - source utilities/system-env/${SYSTEM}.sh 
   script:
     - echo "Merging branch ${TRIGGER_BRANCH} with develop"
     - source utilities/merge-with-develop.sh "$TRIGGER_BRANCH"
@@ -26,7 +26,7 @@ include:
       variables:
         SETUP_SCRIPT: $DEFAULT_SETUP_SCRIPT
   before_script:
-    - source utilities/system-env/${SYSTEM}.sh
+    - source utilities/system-env/${SYSTEM}.sh ${CONFIGURATION}
     - echo "Setting up spack"
     - echo "Trigger branch is ${TRIGGER_BRANCH}"
     - echo "Trigger source is ${TRIGGER_SOURCE}"
@@ -36,7 +36,8 @@ include:
   script:
     - source ${SETUP_SCRIPT} -c ${CONFIGURATION} -g ${GPU_ARCHITECTURE}
     - ./utilities/setup-gcovr.sh ${RUN_COVERAGE_UNIT_TESTS}
-    - source utilities/compilers/${SYSTEM}.sh # System-specific compiler set up
+    - source utilities/compilers/${SYSTEM}.sh ${CONFIGURATION} # System-specific compiler set up
+    - source utilities/compilers/setup-toolchain.sh ${CONFIGURATION}
     - spack clean -m
   artifacts:
     when: always
@@ -50,7 +51,7 @@ include:
   extends: .base-job
   when: always
   before_script:
-    - source utilities/system-env/${SYSTEM}.sh
+    - source utilities/system-env/${SYSTEM}.sh ${CONFIGURATION}
     - echo "Runner home is ${RUNNER_HOME}"
   script:
     - rm -rf ${RUNNER_HOME}/cache/${CI_PROJECT_PATH}/${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}-*
