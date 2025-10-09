@@ -40,8 +40,9 @@ trigger-cpu:
   variables:
     CONFIGURATION: "cpu"
     APPLICATION: "platoanalyze"
-    SYSTEM: "gremlin"
+    SYSTEM: "ascicgpu22"
     EXECUTOR: "shell"
+    CUSTOM_CI_BUILDS_DIR: "/scratch/plato-ci"
 
 trigger-cpu-debug:
   stage: plato-build-test
@@ -73,16 +74,6 @@ trigger-quality-check:
     SYSTEM: "gremlin"
     EXECUTOR: "shell"
 
-trigger-gpu:
-  stage: plato-build-test
-  extends: .trigger-pipeline
-  variables:
-    CONFIGURATION: "gpu"
-    APPLICATION: "platoanalyze"
-    SYSTEM: "ascicgpu22"
-    EXECUTOR: "shell"
-    CUSTOM_CI_BUILDS_DIR: "/scratch/plato-ci"
-
 trigger-optimism:
   stage: plato-build-test
   extends: .trigger-pipeline
@@ -91,13 +82,14 @@ trigger-optimism:
     - if: $CI_PIPELINE_SOURCE == "web" && $REPO_PIPELINES == "plato-python-app"
     - if: $CI_PIPELINE_SOURCE == "pipeline" && $REPO_PIPELINES == "plato-python-app"
   variables:
-    CONFIGURATION: "optimism"
+    CONFIGURATION: "clang-optimism"
     APPLICATION: "plato-python-app"
-    SYSTEM: "gremlin"
+    SYSTEM: "ascicgpu22"
     EXECUTOR: "shell"
     SKIP_PE_UNIT_TESTS: "true"
     SKIP_PE_REGRESSION_TESTS: "true"
     CUSTOM_SETUP_SCRIPT: "plato-python-app/utilities/setup-env.sh"
+    CUSTOM_CI_BUILDS_DIR: "/scratch/plato-ci"
 
 trigger-plato-cubit:
   stage: plato-build-test
@@ -118,7 +110,7 @@ trigger-cpu-snopt:
   stage: plato-build-test
   extends: .trigger-pipeline
   variables:
-    CONFIGURATION: "cpu-snopt"
+    CONFIGURATION: "cpu-clang-snopt"
     APPLICATION: "platoanalyze"
     SYSTEM: "gremlin"
     EXECUTOR: "shell"

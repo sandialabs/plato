@@ -11,7 +11,8 @@ include:
     - source utilities/system-env/${SYSTEM}.sh
     - echo "Installing py-gcovr"
   script:
-    - source utilities/build-env.sh
+    - source utilities/build-env.sh 
+    - spack reindex
     - spack concretize -f
     - spack install py-gcovr
   cache:

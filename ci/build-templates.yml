@@ -15,7 +15,9 @@ include:
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
     - git submodule foreach git branch # Show branch in output
   script:
-    - source utilities/build-env.sh
+    - source utilities/build-env.sh ${CONFIGURATION}
+    - spack reindex
+    - spack clean -m
     - spack concretize -f
     - spack install ${SPACK_INSTALL_ARGS} || true
 # Copy the build log to upload as an artifact
@@ -44,7 +46,7 @@ include:
   extends: .build-and-cache
   variables:
     BUILD_TYPE: dependencies
-    SPACK_INSTALL_ARGS: "--only dependencies"
+    SPACK_INSTALL_ARGS: "--only dependencies -p 4"
   cache:
     - key: ${SPACK_DEPENDENCY_KEY}_${CONFIGURATION}
       paths: 
@@ -62,7 +64,7 @@ include:
   extends: .build-and-cache
   variables:
     BUILD_TYPE: platoengine
-    SPACK_INSTALL_ARGS: "--only dependencies"
+    SPACK_INSTALL_ARGS: "--only dependencies -p 4"
   cache:
     - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
@@ -75,7 +77,7 @@ include:
   timeout: 4 hours
   extends: .build-and-cache
   variables:
-    SPACK_INSTALL_ARGS: ""
+    SPACK_INSTALL_ARGS: "-p 4"
   cache:
     - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:

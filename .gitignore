@@ -2,5 +2,8 @@ spack.yaml
 spack.lock
 .spack-env
 build/
+build-stages/
+cache/
+tmp/
 .vscode/
 platoengine-doxygen-output/

@@ -3,7 +3,7 @@
 if [[ -d "spack" ]]
 then
   export SUPER_PLATO_ROOT=$(pwd)
-
+  source utilities/setup-environment-variables.sh
   source spack/share/spack/setup-env.sh
   spack env activate .
   spack load cmake
