@@ -7,8 +7,8 @@ The goal is to facilitate cloning and managing multiple repositories and several
 
 If it isn't already in your rc script, ensure you have "git" and "git-lfs" loaded, e.g.,
 ```
-module load aue/git/2.42.0
-module load aue/git-lfs/3.3.0
+module load aue/git
+module load aue/git-lfs
 ```
 
 Also, if you are running `git lfs` for the first time on a system, `git lfs install` must be run before cloning this repo.
@@ -84,4 +84,3 @@ These pipelines are considered failing, and so merge requests will still require
 ## Documentation
 
 Doxygen documentation for platoengine is built weekly and available here: [http://1540-compsim.cee-gitlab.lan/plato/automated-cee-build/](http://1540-compsim.cee-gitlab.lan/plato/automated-cee-build/).
-
