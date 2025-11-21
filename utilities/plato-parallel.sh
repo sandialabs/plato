@@ -1,6 +1,6 @@
 #!/bin/bash
 
-run-plato() {
+plato-parallel() {
 
 local NUM_THREADS=1
 local NUM_RANKS=1
@@ -32,7 +32,7 @@ fi
 if [[ -z $RUN_PLATO ]]; then
 
   echo "Plato MPI launch script, which facilitates specifying hardware resources for mixed MPI/OpenMP runs. Usage:"
-  echo "run-plato [-n <number-of-ranks>] [-t <number-of-threads>] <input-file>"
+  echo "plato-parallel [-n <number-of-ranks>] [-t <number-of-threads>] <input-file>"
 
 else
 
@@ -50,12 +50,13 @@ else
 
   local INPUT="${@: -1}"
 
-  export OMP_NUM_THREADS=${NUM_THREADS}
-  export OMP_PROC_BIND=close
-  export OMP_PLACES=threads
-
   echo "Launching plato with ${NUM_RANKS} ranks and ${NUM_THREADS} threads per rank, assuming ${CORES_PER_SOCKET} cores per socket."
-  mpirun -n ${NUM_RANKS} --map-by ppr:${RANKS_PER_SOCKET}:socket:PE=${NUM_THREADS} plato "${INPUT}"
+  mpirun -n ${NUM_RANKS} \
+          --map-by ppr:${RANKS_PER_SOCKET}:socket:PE=${NUM_THREADS} \
+          -x OMP_NUM_THREADS=${NUM_THREADS} \
+          -x OMP_PROC_BIND=close \
+          -x OMP_PLACES=threads \
+          plato "${INPUT}"
 
 fi
 }
