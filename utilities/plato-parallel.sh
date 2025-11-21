@@ -9,10 +9,10 @@ local OPTIND h n t
 
 while getopts "hn:t:" ARG; do
   case "${ARG}" in
-    n) # MPI ranks
+    n)
       NUM_RANKS=${OPTARG}
       ;;
-    t) # GPU arch
+    t)
       NUM_THREADS=${OPTARG}
       ;;
     h)
