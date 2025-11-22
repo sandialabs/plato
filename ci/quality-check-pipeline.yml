@@ -42,7 +42,7 @@ copy-paste-check-analyze:
   variables:
     CHECK_DIR: "${CI_PROJECT_DIR}/platoanalyze/"
     COPY_TOKENS: "1036"
-    EXCLUDE_LIST: "${CI_PROJECT_DIR}/platoanalyze/src/problem/hyperbolic/fluids/unittest/ComputationalFluidDynamicsTests.cpp"
+    EXCLUDE_LIST: ""
   stage: test
   extends: .run-copy-paste-check
   tags:
