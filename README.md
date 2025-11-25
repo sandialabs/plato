@@ -5,11 +5,7 @@ The goal is to facilitate cloning and managing multiple repositories and several
 
 ## Getting started
 
-If it isn't already in your rc script, ensure you have "git" and "git-lfs" loaded, e.g.,
-```
-module load aue/git/2.42.0
-module load aue/git-lfs/3.3.0
-```
+If it isn't already in your rc script, ensure you have "git" and "git-lfs" loaded.
 
 Also, if you are running `git lfs` for the first time on a system, `git lfs install` must be run before cloning this repo.
 If it is not run, files managed by LFS will be downloaded as text-based pointer files.
@@ -19,18 +15,14 @@ This only has to be done once per system as it modifies your git configuration.
 
 Then, clone this repository using the `--recursive` option and set up a spack environment as:
 ```
-git clone git@cee-gitlab.sandia.gov:1540-compsim/plato/plato.git --recursive
+git clone https://github.com/sandialabs/plato.git --recursive
 cd plato
-./utilities/checkout-develop.sh
 ./utilities/setup-env.sh -c <build configuration> [-g CUDA architecture] [-a system architecture]
 ```
 This will clone and checkout all submodules, as well as set up a spack environment for a cpu build.
 The `setup-env.sh` script accepts `cpu`, `cpu-clang-dev`, `cpu-python-app`, `cpu-debug`, `dakota`, `gpu`, and `gpu-slim` build configurations, and the `gpu` options require a CUDA architecture argument.
 The `gpu-slim` spec builds platoanalyze without hex elements and all penalization methods for a faster build.
 The `-a` system architecture option sets the spack `arch` parameter, which is mainly useful for building for generic `x86_64`.
-
-After the initial clone, each submodule may be in a detached head state, and so the `checkout-develop.sh` script may be used to checkout the main development branches of each repo. 
-Note that `checkout-develop.sh` will perform a hard reset, and so if it is used on an already checked-out repository with changes, those changes may be lost.
 
 To chain the new installation to an existing installation, use the `utilities/chain-installation.sh` script:
 ```
@@ -40,21 +32,6 @@ The path should be to the parent of the spack directory containing the installat
 
 After the initial setup, an environment can be activated using `utilities/build-env.sh` or `utilities/test-env.sh`.
 The main difference is that `test-env.sh` will load platoengine and platoanalyze to your path.
-
-### CEE-LAN
-
-An automated build of Plato is available at `/projects/plato/automated-builds`. 
-Different configurations are contained in separate directories, such as `cpu`, `gpu`, and `cpu-clang-dev`.
-A script is available to set up a build area using the pre-built dependencies.
-```
-git clone git@cee-gitlab.sandia.gov:1540-compsim/plato/plato.git --recursive
-cd plato
-./utilities/checkout-develop.sh
-./utilities/setup-for-cee-lan.sh -c <build configuration> [-g CUDA architecture]
-```
-The option `<build configuration>` must match one of the automated build configurations in `/projects/plato/automated-builds`.
-This will setup a `spack.yaml` using the same spec and compiler and also chain your new installation to the installation in the `projects` directory.
-Note that you are still free to edit your `spack.yaml` file, but doing so may result in new dependencies being built.
 
 ## Managing branches
 
@@ -70,18 +47,3 @@ Existing branches can be checked out using
 source utilities/checkout-branch.sh <branch-name>
 ```
 which will checkout the branch if it exists, and checkout and pull the default branch if it does not exist.
-
-## CI and merge requests
-
-CI for Plato is run out of this repository and only runs for merge requests and manual triggers from the web interface.
-For multi-repo merges, each branch must have the same name, which can be done using the `create-branch.sh` script.
-For a merge request, the pipeline will attempt to checkout a branch with the name of the source branch in each repo, falling back on the default branch if it doesn't exist.
-
-Note that for open merge requests, any push to the Gitlab server will launch a new pipeline.
-If you don't need a pipeline to run, `[ci skip]` can be appended to commit messages and no new pipelines will be launched.
-These pipelines are considered failing, and so merge requests will still require a subsequent passing pipeline.
-
-## Documentation
-
-Doxygen documentation for platoengine is built weekly and available here: [http://1540-compsim.cee-gitlab.lan/plato/automated-cee-build/](http://1540-compsim.cee-gitlab.lan/plato/automated-cee-build/).
-
