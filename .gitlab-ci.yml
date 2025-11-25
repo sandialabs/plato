@@ -7,10 +7,13 @@ variables:
   CACHE_COMPRESSION_LEVEL: fastest
   CLEAN_CACHE: "true"
 
+.pipeline-rules: &pipeline-rules
+  - if: $CI_PIPELINE_SOURCE == "web" && $REPO_PIPELINES == null
+  - if: $CI_PIPELINE_SOURCE == "pipeline" && $REPO_PIPELINES == null
+
 .trigger-pipeline:
   rules:
-    - if: $CI_PIPELINE_SOURCE == "pipeline"
-    - if: $CI_PIPELINE_SOURCE == "web"
+    - *pipeline-rules
   variables:
     TRIGGER_BRANCH: ${PARENT_BRANCH}
     TRIGGER_SOURCE: ${PARENT_SOURCE}
@@ -35,19 +38,22 @@ trigger-cpu:
   stage: plato-build-test
   extends: .trigger-pipeline
   variables:
-    CONFIGURATION: "cpu-python-app"
-    SYSTEM: "gremlin"
+    CONFIGURATION: "cpu"
+    APPLICATION: "platoanalyze"
+    SYSTEM: "ascicgpu22"
     EXECUTOR: "shell"
+    CUSTOM_CI_BUILDS_DIR: "/scratch/plato-ci"
 
 trigger-cpu-debug:
   stage: plato-build-test
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "cpu-debug"
+    APPLICATION: "platoanalyze"
     SYSTEM: "gremlin"
     EXECUTOR: "shell"
     RUN_COVERAGE_UNIT_TESTS: "true"
-    SKIP_PA_REGRESSION_TESTS: "true"
+    SKIP_APP_REGRESSION_TESTS: "true"
     SKIP_PE_REGRESSION_TESTS: "true"
 
 trigger-cpu-clang:
@@ -55,9 +61,10 @@ trigger-cpu-clang:
   extends: .trigger-pipeline
   variables:
     CONFIGURATION: "cpu-clang-dev"
+    APPLICATION: "platoanalyze"
     SYSTEM: "gremlin"
     EXECUTOR: "shell"
-    SKIP_PA_REGRESSION_TESTS: "true"
+    SKIP_APP_REGRESSION_TESTS: "true"
     SKIP_PE_REGRESSION_TESTS: "true"
 
 trigger-quality-check:
@@ -67,32 +74,46 @@ trigger-quality-check:
     SYSTEM: "gremlin"
     EXECUTOR: "shell"
 
-trigger-gpu:
-  stage: plato-build-test
-  extends: .trigger-pipeline
-  variables:
-    CONFIGURATION: "gpu"
-    SYSTEM: "lumbergh"
-    EXECUTOR: "shell"
-
-trigger-dakota:
-  stage: plato-build-test
-  extends: .trigger-pipeline
-  variables:
-    CONFIGURATION: "dakota"
-    SYSTEM: "gremlin"
-    EXECUTOR: "shell"
-    CTEST_INCLUDE_REGEX: "dakota"
-    SKIP_PA_UNIT_TESTS: "true"
-
 trigger-optimism:
   stage: plato-build-test
   extends: .trigger-pipeline
+  rules:
+    - *pipeline-rules
+    - if: $CI_PIPELINE_SOURCE == "web" && $REPO_PIPELINES == "plato-python-app"
+    - if: $CI_PIPELINE_SOURCE == "pipeline" && $REPO_PIPELINES == "plato-python-app"
   variables:
-    CONFIGURATION: "optimism"
-    SYSTEM: "gremlin"
+    CONFIGURATION: "clang-optimism"
+    APPLICATION: "plato-python-app"
+    SYSTEM: "ascicgpu22"
     EXECUTOR: "shell"
     SKIP_PE_UNIT_TESTS: "true"
-    SKIP_PA_UNIT_TESTS: "true"
-    SKIP_PA_REGRESSION_TESTS: "true"
-    CTEST_INCLUDE_REGEX: "optimism"
+    SKIP_PE_REGRESSION_TESTS: "true"
+    CUSTOM_SETUP_SCRIPT: "plato-python-app/utilities/setup-env.sh"
+    CUSTOM_CI_BUILDS_DIR: "/scratch/plato-ci"
+
+trigger-plato-cubit:
+  stage: plato-build-test
+  extends: .trigger-pipeline
+  rules:
+    - *pipeline-rules
+    - if: $CI_PIPELINE_SOURCE == "web" && $REPO_PIPELINES == "plato-cubit-geometry"
+    - if: $CI_PIPELINE_SOURCE == "pipeline" && $REPO_PIPELINES == "plato-cubit-geometry"
+  variables:
+    CONFIGURATION: "cpu"
+    APPLICATION: "plato-cubit-geometry"
+    SYSTEM: "ascicgpu22"
+    EXECUTOR: "shell"
+    CUSTOM_SETUP_SCRIPT: "plato-cubit-geometry/utilities/setup-env.sh"
+    CUSTOM_CI_BUILDS_DIR: "/scratch/plato-ci"
+
+trigger-cpu-snopt:
+  stage: plato-build-test
+  extends: .trigger-pipeline
+  variables:
+    CONFIGURATION: "cpu-clang-snopt"
+    APPLICATION: "platoanalyze"
+    SYSTEM: "gremlin"
+    EXECUTOR: "shell"
+    SKIP_APP_REGRESSION_TESTS: "true"
+    SKIP_PE_REGRESSION_TESTS: "true"
+    SKIP_APP_UNIT_TESTS: "true"

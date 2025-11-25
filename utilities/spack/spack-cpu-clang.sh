@@ -1,6 +1,4 @@
 #!/bin/bash
-spack add platoanalyze@develop%clang~amgx~cuda+tacho+enginemesh+esp+mpmd+python build_type=RelWithDebInfo ${SYSTEM_ARCH} \
-  ^trilinos~mumps \
-  ^openmpi@4.1.3 \
-  ^platoengine@develop%clang+esp+expy+iso+platoproxy+platostatics+prune~python_app+stk+unit_testing build_type=RelWithDebInfo
-
+spack add platoanalyze@develop~amgx~cuda+tacho+umfpack+enginemesh build_type=RelWithDebInfo ${SYSTEM_ARCH} \
+  ^platoengine@develop+esp+unit_testing build_type=RelWithDebInfo \
+  ^openmpi@4.1.6 

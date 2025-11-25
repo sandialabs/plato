@@ -9,4 +9,3 @@ EXE_DIR=$(dirname $EXE_PATH)
 module unload ${COMPILER_MODULE} >& /dev/null
 
 echo ${EXE_DIR}
-

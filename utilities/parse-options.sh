@@ -2,6 +2,7 @@
 
 # Parses common setup script options
 parse_setup_options() {
+  DEFAULT_CONFIGURATION="cpu-clang-dev"
   while getopts "hc:g:a:" arg; do
     case $arg in
       c) # Configuration
@@ -28,7 +29,7 @@ parse_setup_options() {
   done
 
   if [[ -z $CONFIGURATION ]]; then
-    echo "Error: Missing required configuration parameter"
-    exit 1
+    CONFIGURATION=$DEFAULT_CONFIGURATION
+    echo "No configuration provided. Using default configuration: $CONFIGURATION"
   fi
 }
