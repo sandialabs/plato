@@ -16,9 +16,8 @@ include:
     - git submodule foreach git branch # Show branch in output
   script:
     - source utilities/build-env.sh ${CONFIGURATION}
-    - spack reindex
     - spack clean -m
-    - spack concretize -f
+    - spack concretize
     - spack install ${SPACK_INSTALL_ARGS} || true
 # Copy the build log to upload as an artifact
     - |

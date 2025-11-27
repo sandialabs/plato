@@ -19,6 +19,8 @@ then
 
   source utilities/sanitizer-env.sh ${SUPER_PLATO_ROOT}/ci/detail/sanitizer_black_list.txt
   source utilities/setup-ccache-on-ceelan.sh
+
+  source utilities/plato-parallel.sh
 else
   echo "Can't find spack directory. This script must be run from the plato super project directory."
 fi
