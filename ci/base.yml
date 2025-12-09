@@ -7,6 +7,7 @@ variables:
   CUBIT_DIR: /opt/cubit/16.02
   CPD_DIR: /home/gitlab-runner/pmd-bin-7.0.0-rc4/bin
   DEFAULT_SETUP_SCRIPT: utilities/setup-env.sh
+  JOB_ID_AUD: https://cee-gitlab.sandia.gov
 
 .base-job:
   hooks:
@@ -18,3 +19,6 @@ variables:
           module load aue/git-lfs
           module load ccache
         fi
+  id_tokens:
+    CI_JOB_JWT:
+      aud: ${JOB_ID_AUD}
