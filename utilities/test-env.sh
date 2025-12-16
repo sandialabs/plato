@@ -1,12 +1,10 @@
 #!/bin/bash
 
 WORKING_SCRIPT_DIR="$(dirname ${BASH_SOURCE[0]})"
-export SUPER_PLATO_ROOT=$(realpath ${WORKING_SCRIPT_DIR}/../)
-echo "Plato environment: $SUPER_PLATO_ROOT"
+source ${WORKING_SCRIPT_DIR}/setup-environment-variables.sh
 
 if [[ -d "${SUPER_PLATO_ROOT}/spack" ]]
 then
-  source ${SUPER_PLATO_ROOT}/utilities/setup-environment-variables.sh
   source ${SUPER_PLATO_ROOT}/spack/share/spack/setup-env.sh
   spack env activate ${SUPER_PLATO_ROOT}
   spack load cmake
