@@ -1,11 +1,15 @@
 #!/bin/bash
 
-if [[ -d "spack" ]]
+WORKING_SCRIPT_DIR="$(dirname ${BASH_SOURCE[0]})"
+export SUPER_PLATO_ROOT=$(realpath ${WORKING_SCRIPT_DIR}/../)
+echo "Plato environment: $SUPER_PLATO_ROOT"
+
+if [[ -d "${SUPER_PLATO_ROOT}/spack" ]]
 then
-  source utilities/setup-environment-variables.sh
-  source spack/share/spack/setup-env.sh
-  spack env activate .
-  source utilities/setup-ccache-on-ceelan.sh
+  source ${SUPER_PLATO_ROOT}/utilities/setup-environment-variables.sh
+  source ${SUPER_PLATO_ROOT}/spack/share/spack/setup-env.sh
+  spack env activate ${SUPER_PLATO_ROOT}
+  source ${SUPER_PLATO_ROOT}/utilities/setup-ccache-on-ceelan.sh
 else
-  echo "Can't find spack directory. This script must be run from the plato super project directory."
+  echo "Can't find spack directory. Ensure all submodules are fully cloned."
 fi
