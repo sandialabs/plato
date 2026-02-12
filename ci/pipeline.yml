@@ -3,12 +3,20 @@ stages: [setup, build, test, teardown]
 include:
   local: ci/*-templates.yml
 
+build-image:
+  stage: setup
+  extends: .build-image
+  tags:
+    - ${SYSTEM}
+    - ${EXECUTOR}
+
 merge-develop:
   stage: setup
   extends: .merge-with-develop
   tags:
     - ${SYSTEM}
     - ${EXECUTOR}
+  needs: ["build-image"]
 
 setup-spack:
   stage: setup
@@ -19,6 +27,8 @@ setup-spack:
   needs:
   - job: "merge-develop"
     optional: true
+  - job: "build-image"
+    optional: false
 
 build-gcovr:
   stage: build
@@ -37,7 +47,7 @@ build-dependencies:
   needs:
     - job: "setup-spack"
       optional: false
-    - job: "build-kcov"
+    - job: "build-gcovr"
       optional: true
 
 build-platoengine:
@@ -64,7 +74,7 @@ unittest-platoengine:
   tags:
     - ${SYSTEM}
     - ${EXECUTOR}
-  needs: ["build-platoengine"]
+  needs: ["build-app"]
 
 unittest-coverage-platoengine:
   stage: test
@@ -80,7 +90,7 @@ test-platoengine:
   tags:
     - ${SYSTEM}
     - ${EXECUTOR}
-  needs: ["build-platoengine"]
+  needs: ["build-app"]
 
 unittest-app:
   stage: test

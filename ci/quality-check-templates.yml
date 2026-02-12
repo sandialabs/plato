@@ -8,7 +8,7 @@ include:
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
   script:
     - echo "Copy paste check running on ${TRIGGER_BRANCH}"
-    - source utilities/copy-paste-check.sh ${CPD_DIR} ${COPY_TOKENS}  ${CHECK_DIR} ${EXCLUDE_LIST}
+    - ${RUN_IN_PODMAN} ./utilities/copy-paste-check.sh ${CPD_DIR} ${COPY_TOKENS} ${CHECK_DIR} ${EXCLUDE_LIST}
 
 .run-doxygen:
   extends: .base-job
@@ -17,7 +17,7 @@ include:
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
   script:
     - echo "Doxygen running on ${TRIGGER_BRANCH}"
-    - ./utilities/doxygen/generate-doxygen.sh
+    - ${RUN_IN_PODMAN} ./utilities/doxygen/generate-doxygen.sh
   artifacts:
     when: always
     paths:

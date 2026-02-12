@@ -14,27 +14,13 @@ include:
     - ./utilities/run-ssh-agent.sh
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
     - git submodule foreach git branch # Show branch in output
+    - |
+      if [[ -v CUSTOM_CLONE_SCRIPT && "${BUILD_TYPE}" == "dependencies" ]]; then
+        source ${CUSTOM_CLONE_SCRIPT}
+      fi
   script:
-    - source utilities/build-env.sh ${CONFIGURATION}
-    - spack clean -m
-    - spack concretize
-    - spack install ${SPACK_INSTALL_ARGS} || true
-# Copy the build log to upload as an artifact
-    - |
-      if [[ "$BUILD_TYPE" == "dependencies" ]]
-      then
-        mkdir "$BUILD_TYPE" && cp platoengine/build-*/spack-build-out.txt "$BUILD_TYPE"
-      else
-        cp ${BUILD_TYPE}/build-*/spack-build-out.txt "$BUILD_TYPE"
-      fi
-# Make sure package was installed, if not there was a build error
-    - if [[ "$BUILD_TYPE" != "dependencies" ]]; then spack find "${BUILD_TYPE}"; fi
-# Uninstall PE for the dependencies build so it doesn't get copied to the spack/opt/spack cache.
-    - |
-      if [[ "$BUILD_TYPE" == "dependencies" ]]
-      then
-        spack uninstall -ayfR platoengine
-      fi
+    - ${RUN_IN_PODMAN} ./ci/scripts/build.sh
+    - ${RUN_IN_PODMAN} ./ci/scripts/check-installation.sh
   artifacts:
     when: always
     paths:
@@ -54,7 +40,6 @@ include:
       when: always
     - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:
-        - build/platoengine
         - spack/opt
       untracked: true # For spack env files
       policy: push
@@ -63,7 +48,7 @@ include:
   extends: .build-and-cache
   variables:
     BUILD_TYPE: platoengine
-    SPACK_INSTALL_ARGS: "--only dependencies -p 4"
+    SPACK_INSTALL_ARGS: "-p 4 platoengine"
   cache:
     - key: ${BUILD_CACHE_KEY}_${CI_PIPELINE_ID}
       paths:

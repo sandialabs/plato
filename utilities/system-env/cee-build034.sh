@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./utilities/system-env/cee.build.sh
+source ./utilities/system-env/cee.build.sh

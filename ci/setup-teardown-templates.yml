@@ -1,6 +1,15 @@
 include: 
   local: ci/base.yml
 
+# Builds an Ubuntu-based image with gcc and clang
+.build-image:
+  extends: .base-job
+  script:
+    - podman login $CI_REGISTRY --username $CI_REGISTRY_USER --password $CI_REGISTRY_PASSWORD
+    - podman pull $CI_TOOLCHAIN_IMAGE || echo "Rebuilding image"
+    - podman build --format docker --tag $CI_TOOLCHAIN_IMAGE -f ci/podman/Dockerfile .
+    - podman push $CI_TOOLCHAIN_IMAGE
+
 # Merges TRIGGER_BRANCH with develop for merge request pipelines.
 # This has to be repeated in other jobs, but this job exists so that if the merge fails,
 # it's clear that it failed due to merge conflicts.
@@ -12,7 +21,7 @@ include:
     - source utilities/system-env/${SYSTEM}.sh 
   script:
     - echo "Merging branch ${TRIGGER_BRANCH} with develop"
-    - source utilities/merge-with-develop.sh "$TRIGGER_BRANCH"
+    - source utilities/merge-with-develop.sh $TRIGGER_BRANCH
 
 # Creates a new spack environment for CONFIGURATION.
 # CONFIGURATION must match a supported spec file in utilities/spack.
@@ -34,11 +43,7 @@ include:
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
     - git submodule foreach git branch # Show branch in output
   script:
-    - source ${SETUP_SCRIPT} -c ${CONFIGURATION} -g ${GPU_ARCHITECTURE}
-    - ./utilities/setup-gcovr.sh ${RUN_COVERAGE_UNIT_TESTS}
-    - source utilities/compilers/${SYSTEM}.sh ${CONFIGURATION} # System-specific compiler set up
-    - source utilities/compilers/setup-toolchain.sh ${CONFIGURATION}
-    - spack clean -m
+    - ${RUN_IN_PODMAN} ./ci/scripts/setup-spack.sh
   artifacts:
     when: always
     untracked: true # For spack env files
