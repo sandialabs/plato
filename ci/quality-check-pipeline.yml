@@ -3,16 +3,24 @@ stages: [setup, test]
 include:
   local: ci/*-templates.yml
 
+build-image:
+  stage: setup
+  extends: .build-image
+  tags:
+    - ${SYSTEM}
+    - ${EXECUTOR}
+
 merge-develop:
   stage: setup
   extends: .merge-with-develop
   tags:
     - ${SYSTEM}
     - ${EXECUTOR}
+  needs: ["build-image"]
 
 copy-paste-check-functional:
   variables:
-    CHECK_DIR: "${CI_PROJECT_DIR}/platoengine/functional/plato/"
+    CHECK_DIR: "platoengine/functional/plato/"
     COPY_TOKENS: "70"
     EXCLUDE_LIST: ""
   stage: test
@@ -23,12 +31,14 @@ copy-paste-check-functional:
   needs:
   - job: "merge-develop"
     optional: true
+  - job: "build-image"
+    optional: false
 
 copy-paste-check-engine:
   variables:
-    CHECK_DIR: "${CI_PROJECT_DIR}/platoengine/base/src/"
+    CHECK_DIR: "platoengine/base/src/"
     COPY_TOKENS: "700"
-    EXCLUDE_LIST: "${CI_PROJECT_DIR}/platoengine/base/src/iso/main/IsoVolumeExtractionTool.cpp"
+    EXCLUDE_LIST: "platoengine/base/src/iso/main/IsoVolumeExtractionTool.cpp"
   stage: test
   extends: .run-copy-paste-check
   tags:
@@ -37,10 +47,12 @@ copy-paste-check-engine:
   needs:
   - job: "merge-develop"
     optional: true
+  - job: "build-image"
+    optional: false
 
 copy-paste-check-analyze:
   variables:
-    CHECK_DIR: "${CI_PROJECT_DIR}/platoanalyze/"
+    CHECK_DIR: "platoanalyze/"
     COPY_TOKENS: "1036"
     EXCLUDE_LIST: ""
   stage: test
@@ -51,6 +63,8 @@ copy-paste-check-analyze:
   needs:
   - job: "merge-develop"
     optional: true
+  - job: "build-image"
+    optional: false
 
 doxygen-engine:
   stage: test
@@ -61,3 +75,5 @@ doxygen-engine:
   needs:
     - job: "merge-develop"
       optional: true
+    - job: "build-image"
+      optional: false

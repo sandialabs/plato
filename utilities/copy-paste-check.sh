@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CPD_OPTIONS='--language cpp   --skip-lexical-errors'
+CPD_OPTIONS='--language cpp --no-fail-on-error'
 RUN_DIR="$1"
 TOKENS="$2"
 CHECK_DIR="$3"

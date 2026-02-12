@@ -17,15 +17,8 @@ include:
     - echo "Unit testing ${PLATO_NAME} for branch ${TRIGGER_BRANCH}"
     - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
-    - source utilities/test-env.sh ${APPLICATION} || true
-    - source utilities/sanitizer-env.sh ${CI_PROJECT_DIR}/${LSAN_BLACKLIST_FILE}
-  script: 
-    - BUILD_DIR=$(spack location -b ${PLATO_NAME})
-    - cd ${BUILD_DIR}
-    - ctest -R UnitTest --output-junit ${CTEST_REPORT_FILE} || TEST_FAILED=true
-    - find . -name "*UnitTester.xml" -exec cp "{}" ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/ \;
-    - cp ${CTEST_LOG} ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/ 
-    - if [[ "${TEST_FAILED}" == "true" ]]; then (exit 1); fi # Fail if ctest failed
+  script:
+    - ${RUN_IN_PODMAN} ./ci/scripts/unittest-plato.sh
   artifacts:
     when: always
     paths:
@@ -83,20 +76,11 @@ include:
     - echo "Testing ${PLATO_NAME} for branch ${TRIGGER_BRANCH}"
     - mkdir -p ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
     - export PA_TIMING_SCALE=${PA_TIMING_SCALE}
-    - export PATH=${CUBIT_DIR}:$PATH
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
-    - source utilities/test-env.sh ${APPLICATION} || true
   script:
-    - BUILD_DIR=$(spack location -b ${PLATO_NAME})
-    - cd ${BUILD_DIR}
-    - echo "Test Labels:"
-    - echo "CTest Include Regex ${CTEST_INCLUDE_REGEX}"
-    - echo "CTest Exclude Regex ${CTEST_EXCLUDE_REGEX}"
-    - echo "Label Exclude ${CTEST_LABEL_EXCLUDE}"
-    - ctest -R "${CTEST_INCLUDE_REGEX}" -E "${CTEST_EXCLUDE_REGEX}" -LE "${CTEST_LABEL_EXCLUDE}" --timeout "${TIMEOUT_IN_SEC}" -j"${CTEST_NUM_JOBS}" --output-junit ${GTEST_REPORT_NAME} || TEST_FAILED=true
-    - cp ${GTEST_REPORT_NAME} ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/
-    - cp ${CTEST_LOG} ${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/ 
-    - if [[ "${TEST_FAILED}" == "true" ]]; then (exit 1); fi # Fail if ctest failed
+    - export OMPI_ALLOW_RUN_AS_ROOT=1
+    - export OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
+    - ${RUN_IN_PODMAN} ./ci/scripts/test-plato.sh
   artifacts:
     when: always
     paths:
@@ -122,6 +106,3 @@ include:
   extends: .test-plato
   variables:
     PLATO_NAME: ${APPLICATION}
-
-
- 

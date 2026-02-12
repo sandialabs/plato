@@ -11,10 +11,7 @@ include:
     - source utilities/system-env/${SYSTEM}.sh
     - echo "Installing py-gcovr"
   script:
-    - source utilities/build-env.sh 
-    - spack reindex
-    - spack concretize -f
-    - spack install py-gcovr
+    - ${RUN_IN_PODMAN} ./ci/scripts/install-gcovr.sh
   cache:
     - key: ${SPACK_DEPENDENCY_KEY}_${CONFIGURATION}
       paths: 
@@ -30,33 +27,15 @@ include:
       when: on_success
     - when: never
   variables:
-    COV_REPORT_DIR: "${CI_PROJECT_DIR}/${REPORTS_ARTIFACTS_DIR}/coverage"
+    COV_REPORT_DIR: "${REPORTS_ARTIFACTS_DIR}/coverage"
     COV_COBERTURA_PATH: "cobertura.xml"
   before_script:
     - source utilities/system-env/${SYSTEM}.sh
     - echo "Unit testing for coverage platoengine for branch ${TRIGGER_BRANCH} from source ${TRIGGER_SOURCE}"
-    - mkdir -p ${COV_REPORT_DIR}
+    - mkdir -p ${CI_PROJECT_DIR}/${COV_REPORT_DIR}
     - source utilities/detail/merge-or-checkout.sh ${TRIGGER_BRANCH} ${TRIGGER_SOURCE}
-    - source utilities/test-env.sh ${APPLICATION}
   script:
-    - BUILD_DIR=$(spack location -b platoengine)
-    - cd ${BUILD_DIR}/functional/plato
-    - ctest
-    - cd ${COV_REPORT_DIR}
-    - SOURCE_DIR=$(spack location -c platoengine)
-    - spack load py-gcovr
-    - |
-      gcovr -j16 --root ${SOURCE_DIR} \
-            --gcov-executable ${GCOV_EXE} \
-            --decisions \
-            --cobertura ${COV_COBERTURA_PATH} \
-            --html-details coverage.html \
-            --print-summary \
-            --exclude-unreachable-branches \
-            --exclude '.*unittest.*' \
-            --exclude '.*test_utilities.*' \
-            --exclude '.*integration_tests.*' \
-            ${BUILD_DIR}/functional/plato
+    - ${RUN_IN_PODMAN} ./ci/scripts/unittest-coverage.sh
   coverage: '/lines: ([0-9]{1,3}.[0-9]%)/'
   artifacts:
     when: always

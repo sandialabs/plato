@@ -4,10 +4,12 @@ variables:
   BUILD_CACHE_KEY: platoengine_build_cache
   REPORTS_ARTIFACTS_DIR: reports-dir
   LSAN_BLACKLIST_FILE: ci/detail/sanitizer_black_list.txt
-  CUBIT_DIR: /opt/cubit/16.02
-  CPD_DIR: /home/gitlab-runner/pmd-bin-7.0.0-rc4/bin
+  CPD_DIR: /pmd/pmd-bin-7.20.0/bin
   DEFAULT_SETUP_SCRIPT: utilities/setup-env.sh
   JOB_ID_AUD: https://cee-gitlab.sandia.gov
+  CI_TOOLCHAIN_IMAGE: $CI_REGISTRY_IMAGE/ci-toolchain:latest
+  CONTAINER_WORKSPACE_DIR: "/ci-workspace"
+  RUN_IN_PODMAN: "podman run --env-host --rm -v $CI_PROJECT_DIR:$CONTAINER_WORKSPACE_DIR -w $CONTAINER_WORKSPACE_DIR $CI_TOOLCHAIN_IMAGE"
 
 .base-job:
   hooks:
