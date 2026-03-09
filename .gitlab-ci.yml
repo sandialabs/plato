@@ -1,15 +1,21 @@
 stages: [plato-build-test]
 
+workflow:
+  name: "Trigger branch: ${PARENT_BRANCH}"
+
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
   FF_USE_FASTZIP: "true"
   ARTIFACT_COMPRESSION_LEVEL: fastest
   CACHE_COMPRESSION_LEVEL: fastest
   CLEAN_CACHE: "true"
+  WIPE_CACHE: "none"
 
 .pipeline-rules: &pipeline-rules
-  - if: $CI_PIPELINE_SOURCE == "web" && $REPO_PIPELINES == null
-  - if: $CI_PIPELINE_SOURCE == "pipeline" && $REPO_PIPELINES == null
+  - if: '$WIPE_CACHE != "none"'
+    when: never
+  - if: '$CI_PIPELINE_SOURCE == "web" && $REPO_PIPELINES == null'
+  - if: '$CI_PIPELINE_SOURCE == "pipeline" && $REPO_PIPELINES == null'
 
 .trigger-pipeline:
   rules:
@@ -24,6 +30,8 @@ variables:
 
 .trigger-quality-check-pipeline:
   rules:
+    - if: '$WIPE_CACHE != "none"'
+      when: never
     - if: $CI_PIPELINE_SOURCE == "pipeline"
     - if: $CI_PIPELINE_SOURCE == "web"
   variables:
@@ -79,8 +87,8 @@ trigger-optimism:
   extends: .trigger-pipeline
   rules:
     - *pipeline-rules
-    - if: $CI_PIPELINE_SOURCE == "web" && $REPO_PIPELINES == "plato-python-app"
-    - if: $CI_PIPELINE_SOURCE == "pipeline" && $REPO_PIPELINES == "plato-python-app"
+    - if: '$CI_PIPELINE_SOURCE == "web" && $REPO_PIPELINES == "plato-python-app"'
+    - if: '$CI_PIPELINE_SOURCE == "pipeline" && $REPO_PIPELINES == "plato-python-app"'
   variables:
     CONFIGURATION: "clang-optimism"
     APPLICATION: "plato-python-app"
@@ -96,8 +104,8 @@ trigger-plato-cubit:
   extends: .trigger-pipeline
   rules:
     - *pipeline-rules
-    - if: $CI_PIPELINE_SOURCE == "web" && $REPO_PIPELINES == "plato-cubit-geometry"
-    - if: $CI_PIPELINE_SOURCE == "pipeline" && $REPO_PIPELINES == "plato-cubit-geometry"
+    - if: '$CI_PIPELINE_SOURCE == "web" && $REPO_PIPELINES == "plato-cubit-geometry"'
+    - if: '$CI_PIPELINE_SOURCE == "pipeline" && $REPO_PIPELINES == "plato-cubit-geometry"'
   variables:
     CONFIGURATION: "cpu"
     APPLICATION: "plato-cubit-geometry"
@@ -120,3 +128,37 @@ trigger-cpu-snopt:
     SKIP_APP_REGRESSION_TESTS: "true"
     SKIP_PE_REGRESSION_TESTS: "true"
     SKIP_APP_UNIT_TESTS: "true"
+
+# Cache-wipe child pipelines:
+# To use this, as a pipeline variable when launching, set WIPE_CACHE to "all" to wipe all caches, or 
+# use the configuration whose cache you'd like to wipe, such as "cpu".
+
+.trigger-cache-wipe:
+  rules:
+    - if: '$WIPE_CACHE != "none"'
+  variables:
+    TRIGGER_BRANCH: ${PARENT_BRANCH}
+    TRIGGER_SOURCE: ${PARENT_SOURCE}
+    TRIGGER_WIPE_CACHE: ${WIPE_CACHE}
+  trigger:
+    include: ci/cache-wipe-pipeline.yml
+    strategy: depend
+  needs: []
+
+trigger-wipe-033:
+  stage: plato-build-test
+  extends: .trigger-cache-wipe
+  variables:
+    SYSTEM: "cee-build033"
+
+trigger-wipe-034:
+  stage: plato-build-test
+  extends: .trigger-cache-wipe
+  variables:
+    SYSTEM: "cee-build034"
+
+trigger-wipe-060:
+  stage: plato-build-test
+  extends: .trigger-cache-wipe
+  variables:
+    SYSTEM: "cee-build060"

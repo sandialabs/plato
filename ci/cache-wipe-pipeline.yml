@@ -1,0 +1,29 @@
+stages: [wipe]
+
+include:
+  local: ci/base.yml
+
+# Optionally wipes build caches, including dependencies, if WIPE_CACHE is set as a pipeline configuration variable.
+wipe-all-caches:
+  stage: wipe
+  extends: .base-job
+  tags:
+    - ${SYSTEM}
+  before_script:
+    - source utilities/system-env/${SYSTEM}.sh
+    - echo "Runner home is ${RUNNER_HOME}"
+  script:
+    - echo "Deleting ${TRIGGER_WIPE_CACHE} cache(s) in ${RUNNER_HOME}/cache/${CI_PROJECT_PATH}/, contents:"
+    - ls "${RUNNER_HOME}/cache/${CI_PROJECT_PATH}/"
+    - if [[ "${TRIGGER_WIPE_CACHE}" == "all" ]]; then rm -rf "${RUNNER_HOME}/cache/${CI_PROJECT_PATH}/"; fi
+    - |
+      if [[ "${TRIGGER_WIPE_CACHE}" != "all" ]]; then
+        echo "Deleting ${RUNNER_HOME}/cache/${CI_PROJECT_PATH}/${SPACK_DEPENDENCY_KEY}_${TRIGGER_WIPE_CACHE}-*"
+        find "${RUNNER_HOME}/cache/${CI_PROJECT_PATH}" \
+             -depth \
+             -type d -regextype posix-egrep \
+             -regex ".*/${SPACK_DEPENDENCY_KEY}_${TRIGGER_WIPE_CACHE}(-[0-9])*-((protected)|(non_protected))" \
+             -exec rm -rfv "{}" \;
+        ls "${RUNNER_HOME}/cache/${CI_PROJECT_PATH}/"
+      fi
+ 
