@@ -21,6 +21,8 @@ then
   spack develop -p ${SUPER_DIR}/platoanalyze -b ${SUPER_DIR}/build/platoanalyze platoanalyze@develop
   spack mirror add ci-mirror ${SUPER_DIR}/plato-prebuilt-binaries/ci-dependency-mirror
 
+  spack config add config:connect_timeout:300
+
   git config --file .git/modules/platoengine/config core.hooksPath ${SUPER_DIR}/utilities/git-hooks
   git config --file .git/modules/platoanalyze/config core.hooksPath ${SUPER_DIR}/utilities/git-hooks
   
