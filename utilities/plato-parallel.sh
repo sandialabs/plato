@@ -1,0 +1,84 @@
+#!/bin/bash
+
+plato-parallel() {
+
+local NUM_THREADS=1
+local NUM_RANKS=1
+local RUN_PLATO=1
+local SYSTEM_TYPE="shared"
+local OPTIND h n t s
+
+while getopts "hn:t:s:" ARG; do
+  case "${ARG}" in
+    n)
+      NUM_RANKS=${OPTARG}
+      ;;
+    t)
+      NUM_THREADS=${OPTARG}
+      ;;
+    s)
+      SYSTEM_TYPE=${OPTARG}
+      ;;
+    h)
+      unset RUN_PLATO
+      ;;
+    *)
+      unset RUN_PLATO
+      ;;
+  esac
+done
+
+if [[ "$#" -lt 1 ]]; then
+  unset RUN_PLATO
+fi
+
+if [[ "${SYSTEM_TYPE}" != "shared" && "${SYSTEM_TYPE}" != "dedicated" ]]; then
+  echo "-s: Unknown system type: ${SYSTEM_TYPE}. Valid options are shared and dedicated."
+  unset RUN_PLATO
+fi
+
+if [[ -z $RUN_PLATO ]]; then
+
+  echo "Plato MPI launch script, which facilitates specifying hardware resources for mixed MPI/OpenMP runs. Usage:"
+  echo "plato-parallel [-n <number-of-ranks>] [-t <number-of-threads>] [-s <shared,dedicated>] <input-file>"
+
+else
+
+  local INPUT="${@: -1}"
+
+
+  if [[ "${SYSTEM_TYPE}" == "shared" ]]; then
+
+    echo "Launching plato for a ${SYSTEM_TYPE} system with ${NUM_RANKS} ranks and ${NUM_THREADS} threads per rank."
+    mpirun -n ${NUM_RANKS} \
+            --bind-to none\
+            -x OMP_NUM_THREADS=${NUM_THREADS} \
+            -x OMP_PROC_BIND=false\
+            -x OMP_PLACES=threads \
+            plato "${INPUT}"
+
+  elif [[ "${SYSTEM_TYPE}" == "dedicated" ]]; then
+
+    local CORES_PER_SOCKET=$(lscpu | grep 'Core(s) per socket:' | awk '{print $4}')
+    if ! [[ "${CORES_PER_SOCKET}" =~ ^[0-9]+$ ]]; then
+      echo "Problem running lscpu to find the number of cores per socket, defaulting to 16."
+      CORES_PER_SOCKET=16
+    fi
+
+    if [[ "${NUM_THREADS}" -gt "${CORES_PER_SOCKET}" ]]; then
+      echo "Warning: The number of threads (${NUM_THREADS}) exceeds the number of cores per socket (${CORES_PER_SOCKET}). Performance may degrade."
+    fi
+
+    local RANKS_PER_SOCKET=$((CORES_PER_SOCKET/NUM_THREADS))
+
+    echo "Launching plato for a ${SYSTEM_TYPE} system with ${NUM_RANKS} ranks and ${NUM_THREADS} threads per rank, assuming ${CORES_PER_SOCKET} cores per socket."
+    mpirun -n ${NUM_RANKS} \
+            --map-by ppr:${RANKS_PER_SOCKET}:socket:PE=${NUM_THREADS} \
+            -x OMP_NUM_THREADS=${NUM_THREADS} \
+            -x OMP_PROC_BIND=close \
+            -x OMP_PLACES=threads \
+            plato "${INPUT}"
+
+  fi
+fi
+}
