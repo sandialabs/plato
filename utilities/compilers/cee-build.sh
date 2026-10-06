@@ -1,7 +1,7 @@
 #!/bin/bash
 
 GCC_MODULE="aue/gcc/14.2.0"
-BINUTILS_MODULE="aue/binutils/2.43.1"
+BINUTILS_MODULE="aue/binutils/2.45"
 CLANG_MODULE="aue/clang/18.1.8"
 CUDA_11_MODULE="aue/cuda/11.8.0-gcc-10.3.0"
 CUDA_12_MODULE="aue/cuda/12.4.0-gcc-12.3.0"

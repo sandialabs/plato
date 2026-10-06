@@ -12,7 +12,8 @@ then
   source spack/share/spack/setup-env.sh
   spack env create --without-view -d .
   spack env activate .
-  spack repo add plato-spack-repo/plato
+
+  spack config add include:[configurations/repos.yaml]
 
   # Set up spack.yaml for configuration
   source ./utilities/spack/spack-${CONFIGURATION}.sh
