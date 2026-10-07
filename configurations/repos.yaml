@@ -2,4 +2,4 @@ repos:
   plato: ../plato-spack-repo/plato
   builtin:
     git: https://github.com/spack/spack-packages.git
-    commit: 3644af5d97728b8260819fc249b7a4b0f592737f
+    commit: 0c732a94b11089e0ec778ef75ab372017cb089bf
